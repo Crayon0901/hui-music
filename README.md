@@ -19,3 +19,7 @@ npm run build --report
 ```
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
+'src/api'//请求相关ajax,jsonp
+'src/common'//通用静态资源文件，字体、img、样式文件等
+'src/store'//vuex,数据中心
