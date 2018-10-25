@@ -1,6 +1,6 @@
 # hui-music
 
-> 方晓辉的音乐播放器
+> 方晓辉的音乐播放器v1.0.0
 
 ## Build Setup
 
