@@ -11,7 +11,8 @@ export default {
 }
 </script>
 
-<style>
+<style scoped lang="stylus" rel="stylesheet/stylus">
+  /*@import '~common/stylus/variable'*/
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

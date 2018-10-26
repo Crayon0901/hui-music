@@ -5,7 +5,7 @@ const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
 
 function resolve (dir) {
-  return path.join(__dirname, '..', dir)
+  return path.join(__dirname, '..', dir)//__dirname指当前文件存在的目录，..就是当前目录的上一层
 }
 
 const createLintingRule = () => ({
@@ -36,6 +36,11 @@ module.exports = {
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src'),
+      'src': resolve('src'),
+      'common': resolve('src/common'),
+      'component': resolve('src/component'),
+      'api': resolve('src/api'),
+      'store': resolve('src/store')
     }
   },
   module: {
