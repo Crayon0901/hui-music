@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
+// import HelloWorld from '@/components/HelloWorld'
 import Recommend from '@/components/recommend/recommend';
 import Singer from '@/components/singer/singer';
 import Rank from '@/components/rank/rank';
@@ -12,7 +12,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/recommend'//redirect默认的router
+      redirect: '/recommend'// redirect默认的router
     },
     {
       path: '/recommend',

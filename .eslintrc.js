@@ -38,6 +38,8 @@ module.exports = {
     //禁用 tab
     'no-tabs': 0,
     //强制使用一致的缩进
-    'indent': 0
+    'indent': 0,
+    //要求或禁止使用分号代替 ASI
+    'semi': 0
   }
 }
