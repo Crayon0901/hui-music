@@ -1,8 +1,8 @@
 // 背景图片
 bg-image($url)
-  background-image: url($url + "@2x.png")
-  @media (-webkit-min-device-pixel-ratio: 3),(min-device-pixel-ratio: 3)
-    background-image: url($url + "@3x.png")
+  background-image: url('~common/image/'+$url + "@2x.png")
+  /*@media (-webkit-min-device-pixel-ratio: 3),(min-device-pixel-ratio: 3)
+    background-image: url($url + "@3x.png")*/
 
 // 不换行
 no-wrap()
@@ -20,3 +20,17 @@ extend-click()
     left: -10px
     right: -10px
     bottom: -10px
+//flex-row
+flex-row($justify,$align){
+  display: flex;
+  flex-direction: row;
+  justify-content: $justify;
+  align-items: $align;
+}
+//flex-cloumn
+flex-row($justify,$align){
+  display: flex;
+  flex-direction: cloumn;
+  justify-content: $justify;
+  align-items: $align;
+}

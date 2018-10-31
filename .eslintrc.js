@@ -34,6 +34,10 @@ module.exports = {
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     //强制在 function的左括号之前使用一致的空格
-    'space-before-function-paren': 0
+    'space-before-function-paren': 0,
+    //禁用 tab
+    'no-tabs': 0,
+    //强制使用一致的缩进
+    'indent': 0
   }
 }
