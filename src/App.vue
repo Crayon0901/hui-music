@@ -1,24 +1,31 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <router-view/>
+    <MHeader></MHeader>
+    <Tab></Tab>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
+import MHeader from 'components/m-header/m-header';
+import Tab from 'components/tab/tab';
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    MHeader,
+    Tab
+  }
 }
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
-  @import '~common/stylus/variable'
+  @import '~common/stylus/variable'/*CSS loader 会把把非根路径的url解释为相对路径， 加~前缀才会解释成模块路径*/
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: $color-theme;
-  margin-top: 60px;
+  // margin-top: 60px;
 }
 </style>

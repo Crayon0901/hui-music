@@ -4,7 +4,10 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import 'common/stylus/index.styl'
+import 'babel-polyfill'// babel的补丁，用于转化部分es6的语法，比如Promise
+import fastclick from 'fastclick'// 解决手机端点击0.3秒延迟的问题
 
+fastclick.attach(document.body)// 绑定到document.body下，这样所有的body下的点击时间都没有0.3秒的延迟了
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
