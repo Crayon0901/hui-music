@@ -40,6 +40,10 @@ module.exports = {
     //强制使用一致的缩进
     'indent': 0,
     //要求或禁止使用分号代替 ASI
-    'semi': 0
+    'semi': 0,
+    //强制在块之前使用一致的空格
+    'space-before-blocks': 0,
+    //强制在逗号前后使用一致的空格
+    'comma-spacing': 0
   }
 }

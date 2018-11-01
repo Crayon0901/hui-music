@@ -1,9 +1,10 @@
-import originJsonp from 'jsonp'
+import originJsonp from 'jsonp'// 引入第三方插件库jsonp用于第三方QQapi请求
+import {formatUri} from './util';
 
 export default function jsonp(url, data, option) {
-  url += (url.indexOf('?') < 0 ? '?' : '&') + param(data)
+  url = formatUri(url, data);
 
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => { // 返回一个promise
     originJsonp(url, option, (err, data) => {
       if (!err) {
         resolve(data)
@@ -12,13 +13,4 @@ export default function jsonp(url, data, option) {
       }
     })
   })
-}
-
-export function param(data) {
-  let url = ''
-  for (var k in data) {
-    let value = data[k] !== undefined ? data[k] : ''
-    url += '&' + k + '=' + encodeURIComponent(value)
-  }
-  return url ? url.substring(1) : ''
 }

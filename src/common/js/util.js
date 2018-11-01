@@ -25,3 +25,17 @@ export function debounce(func, delay) {
     }, delay)
   }
 }
+
+export function formatUri(url, data){
+  url += (url.indexOf('?') < 0 ? '?' : '') + spliceParams(data);
+  return url
+}
+
+function spliceParams(data){ // 接收一个对象进行拼接
+  let url = '';
+  for (let i in data){
+    let value = data[i] !== undefined ? data[i] : '';
+    url += `&${i}=${encodeURIComponent(value)}`;
+  }
+  return url // ? url.substring(1) : ''//url存在则切割掉第一个&
+}
