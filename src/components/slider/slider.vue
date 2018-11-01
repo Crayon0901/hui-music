@@ -45,11 +45,10 @@
 				}
 				if (this.loop) {
 					width += 2 * sliderWidth;
-					this.$refs.sliderGroup.style.width = width + 'px';
 				}
+				this.$refs.sliderGroup.style.width = width + 'px';
 			},
 			_initSlider(){
-				console.log(22)
 				this.slider = new Bscroll(this.$refs.slider,{
 					scrollX: true,
 					scrollY: false,
