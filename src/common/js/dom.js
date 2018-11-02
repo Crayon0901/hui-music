@@ -14,12 +14,12 @@ export function addClass(el, className) { // 为节点添加class
   el.className = newClass.join(' ')
 }
 
-export function getData(el, name, val) {
+export function getData(el, name, val) { // get或者set节点属性，data-前缀开头
   const prefix = 'data-'
-  if (val) {
+  if (val) { // 有值就set
     return el.setAttribute(prefix + name, val)
   }
-  return el.getAttribute(prefix + name)
+  return el.getAttribute(prefix + name) // 没值就get
 }
 
 let elementStyle = document.createElement('div').style
