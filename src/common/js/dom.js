@@ -4,7 +4,6 @@ export function hasClass(el, className) {
 }
 
 export function addClass(el, className) { // 为节点添加class
-  console.log(el, className)
   if (hasClass(el, className)) { // 如果已经有这个class就return
     return
   }

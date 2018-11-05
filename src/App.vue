@@ -2,7 +2,9 @@
   <div id="app">
     <MHeader></MHeader>
     <Tab></Tab>
-    <router-view></router-view>
+    <keep-alive> <!-- 包裹的内容会被添加到缓存里面，不会每次都重新加载一次 -->
+      <router-view></router-view>
+    </keep-alive>
   </div>
 </template>
 

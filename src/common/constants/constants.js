@@ -2,7 +2,7 @@
 * @Author: FangXiaoHui
 * @Date:   2018-11-01 11:00:07
 * @Last Modified by:   Administrator
-* @Last Modified time: 2018-11-01 13:56:18
+* @Last Modified time: 2018-11-05 10:46:57
 */
 export default {
 	RECOMMEND_BANNER_URL: 'https://c.y.qq.com/musichall/fcgi-bin/fcg_yqqhomepagerecommend.fcg',// 获取推荐banner的url
@@ -14,6 +14,7 @@ export default {
 		format: 'jsonp'
 	},
 	OPTION: {
-		param: 'jsonpCallback'
+		param: 'jsonpCallback',
+		//prefix: '__jsonp' // jsonp在Response时返回的字段名字
 	}
 }

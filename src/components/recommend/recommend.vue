@@ -19,7 +19,7 @@
 </template>
 
 <script>
-	import {getRecommend} from 'api/recommend';
+	import {getRecommend, getDiscList} from 'api/recommend';
 	import Slider from 'components/slider/slider';// 引入组件
 	export default {
 		data(){ // 定义data
@@ -29,6 +29,7 @@
 		},
 		created() {
 			this._getRecommend();
+			this._getDiscList();
 		},
 		methods: {// 定义一个方法的集合，把方法都放在这里面
 			_getRecommend() {
@@ -37,6 +38,9 @@
 						this.recommends = res.data.slider;// 赋值给recommends
 					}
 				})
+			},
+			_getDiscList(){
+				getDiscList()
 			}
 		},
 		components: { // 组件注册
