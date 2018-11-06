@@ -24,13 +24,23 @@ extend-click()
 flex-row($justify,$align){
   display: flex;
   flex-direction: row;
-  justify-content: $justify;
-  align-items: $align;
+  if($justify){
+    justify-content: $justify;
+  }
+  if($align){
+    align-items: $align;
+  }
+  box-sizing: border-box;
 }
-//flex-cloumn
-flex-row($justify,$align){
+//flex-column
+flex-column($justify,$align){
   display: flex;
-  flex-direction: cloumn;
-  justify-content: $justify;
-  align-items: $align;
+  flex-direction: column;
+  if($justify){
+    justify-content: $justify;
+  }
+  if($align){
+    align-items: $align;
+  }
+  box-sizing: border-box;
 }

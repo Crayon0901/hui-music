@@ -37,5 +37,5 @@ function spliceParams(data){ // 接收一个对象进行拼接
     let value = data[i] !== undefined ? data[i] : '';
     url += `&${i}=${encodeURIComponent(value)}`;
   }
-  return url // ? url.substring(1) : ''//url存在则切割掉第一个&
+  return url? url.substring(1) : ''//url存在则切割掉第一个&
 }

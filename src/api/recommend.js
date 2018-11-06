@@ -2,11 +2,12 @@
 * @Author: FangXiaoHui
 * @Date:   2018-11-01 10:45:49
 * @Last Modified by:   Administrator
-* @Last Modified time: 2018-11-05 18:25:37
+* @Last Modified time: 2018-11-06 13:54:59
 */
 import jsonp from '@/common/js/jsonp';
 import constants from '@/common/constants/constants';// 不知道结构赋值为什么用不了????????
 import axios from 'axios';
+import api from './api';
 const {RECOMMEND_BANNER_URL, RECOMMEND_BANNER_URL_PARAMS, OPTION} = constants;
 
 export function getRecommend(){
@@ -37,3 +38,8 @@ export function getDiscList(){
 		return Promise.resolve(res.data)
 	})
 }
+
+// export function getText(){
+// 	const url = 'http://192.168.1.42:8080';
+// 	api(url,{abc:123,def:456},{abc:123,def:456})
+// }
