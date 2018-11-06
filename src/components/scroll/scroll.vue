@@ -52,7 +52,6 @@
 		},
 		methods: {
 			_initScroll(){
-				console.log(this.$refs.scroll)
 				if (!this.$refs.scroll) {
 					return
 				}
@@ -70,7 +69,6 @@
 				this.scroll && this.scroll.enable();
 			},
 			refresh() {
-				console.log(this.scroll)
 				this.scroll && this.scroll.refresh();
 			},
 			scrollTo() {
