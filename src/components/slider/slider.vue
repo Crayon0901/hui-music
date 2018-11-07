@@ -61,6 +61,19 @@
 		destroyed(){ // 页面卸载时，清除计时器
 			clearTimeout(this.timer);
 		},
+		activated(){ // 缓存页面的生命周期函数，页面加载时调用
+			let pageIndex = this.slider.getCurrentPage().pageX; // 该方法用于获取当前是第几个page
+			if (this.loop) { // 自动轮播了，图片是n+2了，所以第一个图片应该是下标为1的图片
+				// pageIndex -= 1;
+			}
+			this.currentPageIndex = pageIndex;
+			if (this.autoPlay) {
+				clearTimeout(this.timer);
+				this._play();
+			}
+		},
+		deactivated(){ // 缓存页面的生命周期函数，页面卸载时调用
+		},
 		methods: {
 			_setSliderWidth(){ // 设置slider宽度
 				this.children = this.$refs.sliderGroup.children; // 获取sliderGroup的子节点

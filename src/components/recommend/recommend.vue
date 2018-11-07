@@ -1,12 +1,12 @@
 <template>
 	<div class="recommend" ref="recommend" >
-		<Scroll class="recommend-content" :data="list" :scrollY="true">
+		<Scroll ref="scroll" class="recommend-content" :data="list" :scrollY="true">
 			<div>
 				<div v-if="recommends.length" class="slider-wrapper">
 					<Slider> <!-- 引用组件，组件包裹的内容会传递给这个组件，也就是下面的div，组件内部占位符会被这个div替换 -->
 						<div v-for="item in recommends"> <!-- 遍历recommends数组 -->
 							<a :href="item.linkUrl">
-								<img :src="item.picUrl">
+								<img class="needsclick" @load="loadImage" :src="item.picUrl"> <!-- better-scroll和fastclick冲突时，可以在元素上添加needsclick，就可以点击了 -->
 							</a>
 						</div>
 					</Slider>
@@ -16,7 +16,7 @@
 					<ul>
 						<li v-for="item in list" class="list-wrapper">
 							<div class="wrapper-img">
-								<img :src="item.imgurl" alt="item.dissname" width="60px" height="60px">
+								<img v-lazy="item.imgurl" alt="item.dissname" width="60px" height="60px">
 							</div>
 							<div class="wrapper-text">
 								<h2 class="title">{{item.creator.name}}</h2>
@@ -27,6 +27,9 @@
 				</div>
 			</div>
 		</Scroll>
+			<div class="loading-center" v-show="!list.length">
+				<Loading></Loading>
+			</div>
 	</div>
 </template>
 
@@ -34,6 +37,7 @@
 	import {getRecommend, getDiscList, getText} from 'api/recommend';
 	import Slider from 'components/slider/slider';// 引入组件
 	import Scroll from '../scroll/scroll';
+	import Loading from 'components/loading/loading';
 	export default {
 		data(){ // 定义data
 			return {
@@ -41,9 +45,18 @@
 				list: []
 			}
 		},
-		created() {
+		created() { // 实例加载前，还没有template和element
 			this._getRecommend();
 			this._getDiscList();
+		},
+		mounted(){ // 实例初始化完成，节点有了
+			console.log('节点有了',this)
+		},
+		updated(){ // 数据更新时
+			console.log('更新了',this)
+		},
+		destroyed(){ // 页面卸载时
+			console.log('页面卸载了',this)
 		},
 		methods: {// 定义一个方法的集合，把方法都放在这里面
 			_getRecommend() {
@@ -57,11 +70,18 @@
 				getDiscList().then((res) => {
 					this.list = res.data.list;
 				})
+			},
+			loadImage(){ // 监听图片加载事件，当有一个图片加载了的，就可以重新计算scroll的高度了，因为图片的高度不确定的
+				if (!this.flagLoadImage) {
+					this.$refs.scroll.refresh();
+					this.flagLoadImage = true;
+				}
 			}
 		},
 		components: { // 组件注册
 			Slider,
-			Scroll
+			Scroll,
+			Loading
 		}
 	}
 </script>
@@ -112,6 +132,14 @@
 					}
 				}
 			}
+		}
+		.loading-center{
+			position: absolute;
+			bottom: 0;
+			top: 0;
+			left: 0;
+			right: 0;
+			display: flex;
 		}
 	}
 </style>
