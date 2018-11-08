@@ -5,7 +5,7 @@ import api from './api';
 
 const {SINGER_LIST, RECOMMEND_BANNER_URL_PARAMS, OPTION} = constants;
 
-export function getSingerlist(){
+export function getSingerlist(index=-100, sin=0){
 	let paramsData = {
 		"comm": {
 			"ct": 24,
@@ -18,8 +18,8 @@ export function getSingerlist(){
 				"area": -100,
 				"sex": -100,
 				"genre": -100,
-				"index": -100,
-				"sin": 0,
+				"index": index,
+				"sin": sin,
 				"cur_page": 1
 			}
 		}
@@ -29,10 +29,23 @@ export function getSingerlist(){
 		hostUin: 0,
 		platform: 'yqq',
 		needNewCode: 0,
-		callback: 'jsonpCallback',
 		inCharset: 'utf8',
-		jsonpCallback: 'jsonpCallback',
 		data: JSON.stringify(paramsData)
 	});
 	return jsonp(SINGER_LIST, data)
+
+	// const url = 'https://c.y.qq.com/v8/fcg-bin/v8.fcg'
+
+	// const data = Object.assign({}, RECOMMEND_BANNER_URL_PARAMS, {
+	// channel: 'singer',
+	// page: 'list',
+	// key: 'all_all_all',
+	// pagesize: 100,
+	// pagenum: 1,
+	// hostUin: 0,
+	// needNewCode: 0,
+	// platform: 'yqq'
+	// })
+
+	// return jsonp(url, data, OPTION)
 }

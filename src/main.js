@@ -10,8 +10,9 @@ import VueLazyload from 'vue-lazyload'// 引入图片懒加载插件
 
 fastclick.attach(document.body)// 绑定到document.body下，这样所有的body下的点击时间都没有0.3秒的延迟了
 Vue.use(VueLazyload, {
-	preLoad:1.9,
-	loading:require('common/image/logo@2x.png')
+	preLoad: 1.9,
+	loading: require('common/image/logo@2x.png'),
+	error: require('common/image/loadError.svg')
 })
 Vue.config.productionTip = false
 
