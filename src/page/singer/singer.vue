@@ -14,6 +14,11 @@
 		<div class="wrapper-loading" v-show="!singerList.length">
 			<Loading></Loading>
 		</div>
+		<div>
+			<ul class="right-list">
+				<li v-for="(item,index) in shortcutList">{{item}}</li>
+			</ul>
+		</div>
 	</Scroll>
 </template>
 
@@ -55,6 +60,13 @@
 							console.log(this.singerListM)
 						}
 					}
+				})
+			}
+		},
+		computed: { // 计算的对象
+			shortcutList(){
+				return this.singerListM.map((item) => {
+					return item.name.slice(0,1)
 				})
 			}
 		},
@@ -108,6 +120,22 @@
 			top: 0;
 			bottom: 0;
 			display: flex;
+		}
+		.right-list{
+			position: absolute;
+			width: 25px;
+			right: 0;
+			top: 50%;
+			transform: translate(0,-50%);
+			background-color: $color-background-d;
+			color: $color-text-l;
+			font-size: $font-size-small-s;
+			padding: 10px 0;
+			border-top-left-radius: 50px;
+			border-bottom-left-radius: 50px;
+			li{
+				margin: 5px 0;
+			}
 		}
 	}
 </style>
