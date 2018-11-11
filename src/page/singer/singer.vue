@@ -5,7 +5,7 @@
 				<div class="list-name">{{arry.name}}</div>
 				<div v-for="item in arry.item">
 					<div class="list-item">
-						<img v-lazy="item.singer_pic" class="pic" width="60px" height="60px">
+						<img v-lazy="item.singer_pic.replace('webp','jpg?max_age=2592000')" class="pic" width="60px" height="60px">
 						<span class="singerName">{{item.singer_name}}</span>
 					</div>
 				</div>
