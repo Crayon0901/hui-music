@@ -20,7 +20,7 @@
 		</div>
 		<div @touchstart="handleTouchStart" @touchmove.stop.prevent="handleTouchMove"> <!-- .stop.prevent阻止事件冒泡和事件捕获 -->
 			<ul class="right-list">
-				<li v-for="(item,index) in shortcutList" :data-index="index">{{item}}</li>
+				<li v-for="(item,index) in shortcutList" :data-index="index" :class="{'current':currentIndex===index}">{{item}}</li>
 			</ul>
 		</div>
 	</Scroll>
@@ -33,13 +33,15 @@
 	import {getData} from 'common/js/dom';
 
 	let index = 0;
-	let firstTouch = {}
+	let firstTouch = {};
 	export default{
 		data(){
 			return {
 				singerList: [], // 纯歌手列表
 				singerListM: [], // 包括字母的歌手列表
-				scrollY: -1 // 默认的scroll滚动坐标
+				scrollY: -1, // 默认的scroll滚动坐标
+				listHeightGroup: [], // 28个列表的高度集合
+				currentIndex: 0 // 滑动到第N个
 			}
 		},
 		created(){
@@ -64,6 +66,11 @@
 						if (index < 28) {
 							this._getSingerList(index, 160);
 						}else{
+							let height = 0;
+							this.$refs.listGroup.forEach((item) => {
+								height += item.clientHeight;
+								this.listHeightGroup.push(height)
+							})
 						}
 					}
 				})
@@ -86,8 +93,14 @@
 				this.$refs.scroll.scrollToElement(this.$refs.listGroup[index],200); // 有多个$refs是listGroup的话会变成一个集合取index即可
 			},
 			scroll(pos){
+				console.log(222222)
 				this.scrollY = pos.y;
-
+				let abs = Math.abs(this.scrollY);
+				let indexKey = this.listHeightGroup.findIndex((item) => {
+					return item > parseInt(abs)
+				})
+				this.currentIndex = indexKey;
+				console.log(this.currentIndex)
 			}
 		},
 		computed: { // 计算的对象
@@ -161,6 +174,9 @@
 			padding: 10px 0;
 			border-top-left-radius: 50px;
 			border-bottom-left-radius: 50px;
+			.current{
+				color: $color-theme
+			}
 		}
 	}
 </style>
