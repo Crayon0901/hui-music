@@ -39,7 +39,7 @@
 			return {
 				singerList: [], // 纯歌手列表
 				singerListM: [], // 包括字母的歌手列表
-				scrollY: -1
+				scrollY: -1 // 默认的scroll滚动坐标
 			}
 		},
 		created(){
@@ -86,7 +86,8 @@
 				this.$refs.scroll.scrollToElement(this.$refs.listGroup[index],200); // 有多个$refs是listGroup的话会变成一个集合取index即可
 			},
 			scroll(pos){
-				console.log(pos);
+				this.scrollY = pos.y;
+
 			}
 		},
 		computed: { // 计算的对象
