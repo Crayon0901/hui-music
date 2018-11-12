@@ -1,7 +1,11 @@
 <template>
-	<Scroll :data="singerList" ref="scroll" class="scroll">
+	<Scroll :data="singerList" 
+			ref="scroll" 
+			class="scroll" 
+			:listenScroll="true"
+			@scroll="scroll">
 		<ul class="wrapper-singerList">
-			<li v-for="arry in singerListM">
+			<li v-for="arry in singerListM" ref="listGroup">
 				<div class="list-name">{{arry.name}}</div>
 				<div v-for="item in arry.item">
 					<div class="list-item">
@@ -14,9 +18,9 @@
 		<div class="wrapper-loading" v-show="!singerList.length">
 			<Loading></Loading>
 		</div>
-		<div>
+		<div @touchstart="handleTouchStart" @touchmove.stop.prevent="handleTouchMove"> <!-- .stop.prevent阻止事件冒泡和事件捕获 -->
 			<ul class="right-list">
-				<li v-for="(item,index) in shortcutList">{{item}}</li>
+				<li v-for="(item,index) in shortcutList" :data-index="index">{{item}}</li>
 			</ul>
 		</div>
 	</Scroll>
@@ -26,20 +30,23 @@
 	import {getSingerlist} from 'api/singer';
 	import Scroll from 'components/scroll/scroll';
 	import Loading from 'components/loading/loading';
+	import {getData} from 'common/js/dom';
 
 	let index = 0;
-
+	let firstTouch = {}
 	export default{
 		data(){
 			return {
 				singerList: [], // 纯歌手列表
-				singerListM: [] // 包括字母的歌手列表
+				singerListM: [], // 包括字母的歌手列表
+				scrollY: -1
 			}
 		},
 		created(){
 			this._getSingerList();
 		},
 		methods: {
+			//获取列表
 			_getSingerList(indexs, sin){
 				getSingerlist(indexs,sin).then((res) => {
 					if (res.code === 0) {
@@ -57,10 +64,29 @@
 						if (index < 28) {
 							this._getSingerList(index, 160);
 						}else{
-							console.log(this.singerListM)
 						}
 					}
 				})
+			},
+			//右侧列表触碰
+			handleTouchStart(e){
+				firstTouch.y1 = e.touches[0].pageY; // e.touches[0]是第一个触碰手指的element，.pageY是纵坐标（相对于页面）
+				let anchorIndex = getData(e.target, 'index'); // 获取当前触碰的对应的index
+				firstTouch.anchorIndex = +anchorIndex;
+				this.scrollTo(anchorIndex);
+			},
+			//右侧列表触碰移动
+			handleTouchMove(e){
+				firstTouch.y2 = e.touches[0].pageY; // 移动过程中的Y值
+				let delta = (firstTouch.y2 - firstTouch.y1) / 18 | 0;//用移动中的值减去第一次触碰的值，计算差值，然后除以每个字母的高度，在取整
+				let anchorIndex = firstTouch.anchorIndex + delta; // 第一次触碰的值加上偏差的值，等于最终的值
+				this.scrollTo(anchorIndex);
+			},
+			scrollTo(index){
+				this.$refs.scroll.scrollToElement(this.$refs.listGroup[index],200); // 有多个$refs是listGroup的话会变成一个集合取index即可
+			},
+			scroll(pos){
+				console.log(pos);
 			}
 		},
 		computed: { // 计算的对象
@@ -130,12 +156,10 @@
 			background-color: $color-background-d;
 			color: $color-text-l;
 			font-size: $font-size-small-s;
+			line-height: 18px;
 			padding: 10px 0;
 			border-top-left-radius: 50px;
 			border-bottom-left-radius: 50px;
-			li{
-				margin: 5px 0;
-			}
 		}
 	}
 </style>

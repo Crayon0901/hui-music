@@ -16,7 +16,7 @@
 				type: Boolean,
 				default: true
 			},
-			listenScroll: {
+			listenScroll: { // 是否监听滚动事件
 				type: Boolean,
 				default: false
 			},
@@ -61,6 +61,12 @@
 					scrollY: this.scrollY,
 					scrollX: this.scrollX
 				})
+				if (this.listenScroll) {
+					let that = this;
+					this.scroll.on('scroll', (pos) => {
+						that.$emit('scroll', pos); // $emit,是向父组件派发事件'scroll'，把滚动事件拿到的参数传递给父组件的'scroll'函数
+					})
+				}
 			},
 			disable() {
 				this.scroll && this.scroll.disable();
@@ -72,7 +78,7 @@
 				this.scroll && this.scroll.refresh();
 			},
 			scrollTo() {
-				this.scroll && this.scroll.scrollTo.apply(this.scroll, arguments);
+				this.scroll && this.scroll.scrollTo.apply(this.scroll, arguments);// 因为要传递argument参数，所以要用apply
 			},
 			scrollToElement(){
 				this.scroll && this.scroll.scrollToElement.apply(this.scroll, arguments);
