@@ -14,8 +14,9 @@ export default {
 		format: 'jsonp'
 	},
 	OPTION: {
-		param: 'jsonpCallback',
-		// prefix: '__jsonp' // jsonp在Response时返回的字段名字
+		param: 'jsonpCallback', // 发给后端的回调key
+		// prefix: '__jp' // 发给后端的回调value,被后端拿来做回调的名字
 	},
-	SINGER_LIST: 'https://u.y.qq.com/cgi-bin/musicu.fcg'
+	SINGER_LIST: 'https://u.y.qq.com/cgi-bin/musicu.fcg',
+	RANK_LIST: 'https://c.y.qq.com/v8/fcg-bin/fcg_myqq_toplist.fcg'
 }

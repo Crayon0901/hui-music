@@ -34,7 +34,7 @@
 </template>
 
 <script>
-	import {getRecommend, getDiscList, getText} from 'api/recommend';
+	import {getRecommend, getDiscList} from 'api/recommend';
 	import Slider from 'components/slider/slider';// 引入组件
 	import Scroll from 'components/scroll/scroll';
 	import Loading from 'components/loading/loading';

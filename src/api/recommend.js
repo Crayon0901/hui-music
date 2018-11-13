@@ -38,8 +38,3 @@ export function getDiscList(){
 		return Promise.resolve(res.data)
 	})
 }
-
-// export function getText(){
-// 	const url = 'http://192.168.1.42:8080';
-// 	api(url,{abc:123,def:456},{abc:123,def:456})
-// }
