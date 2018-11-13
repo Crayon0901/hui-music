@@ -3,8 +3,9 @@
 			ref="scroll" 
 			class="scroll" 
 			:listenScroll="true"
-			@scroll="scroll">
-		<ul class="wrapper-singerList">
+			@scroll="scroll"
+			:probeType="3">
+		<ul class="wrapper-singerList" v-show="reveal">
 			<li v-for="arry in singerListM" ref="listGroup">
 				<div class="list-name">{{arry.name}}</div>
 				<div v-for="item in arry.item">
@@ -15,13 +16,16 @@
 				</div>
 			</li>
 		</ul>
-		<div class="wrapper-loading" v-show="!singerList.length">
+		<div class="wrapper-loading" v-show="!reveal">
 			<Loading></Loading>
 		</div>
-		<div @touchstart="handleTouchStart" @touchmove.stop.prevent="handleTouchMove"> <!-- .stop.prevent阻止事件冒泡和事件捕获 -->
+		<div v-show="reveal" @touchstart="handleTouchStart" @touchmove.stop.prevent="handleTouchMove"> <!-- .stop.prevent阻止事件冒泡和事件捕获 -->
 			<ul class="right-list">
 				<li v-for="(item,index) in shortcutList" :data-index="index" :class="{'current':currentIndex===index}">{{item}}</li>
 			</ul>
+		</div>
+		<div class="fixed-title" ref="fixedTitle" v-show="fixedTitleName">
+			{{fixedTitleName}}
 		</div>
 	</Scroll>
 </template>
@@ -41,7 +45,9 @@
 				singerListM: [], // 包括字母的歌手列表
 				scrollY: -1, // 默认的scroll滚动坐标
 				listHeightGroup: [], // 28个列表的高度集合
-				currentIndex: 0 // 滑动到第N个
+				currentIndex: 0, // 滑动到第N个
+				reveal: false, // 显示列表
+				fixedTitleName: ''
 			}
 		},
 		created(){
@@ -66,11 +72,17 @@
 						if (index < 28) {
 							this._getSingerList(index, 160);
 						}else{
-							let height = 0;
-							this.$refs.listGroup.forEach((item) => {
-								height += item.clientHeight;
-								this.listHeightGroup.push(height)
-							})
+							this.reveal = true;
+							// let height = 0;
+							// const listGroupL = this.$refs.listGroup;
+							// for(let i = 0; i < listGroupL.length;i++){
+							// 	height += listGroupL[i].clientHeight
+							// 	this.listHeightGroup.push(height)
+							// }
+							// // this.$refs.listGroup.forEach((item,index) => {
+							// // 	height += item.clientHeight;
+							// // 	this.listHeightGroup.push(height)
+							// // })
 						}
 					}
 				})
@@ -80,7 +92,10 @@
 				firstTouch.y1 = e.touches[0].pageY; // e.touches[0]是第一个触碰手指的element，.pageY是纵坐标（相对于页面）
 				let anchorIndex = getData(e.target, 'index'); // 获取当前触碰的对应的index
 				firstTouch.anchorIndex = +anchorIndex;
+				this.currentIndex = +anchorIndex
 				this.scrollTo(anchorIndex);
+				let listGroup = this.$refs.listGroup;
+				this.fixedTitleName = listGroup[this.currentIndex].getElementsByClassName('list-name')[0].innerHTML
 			},
 			//右侧列表触碰移动
 			handleTouchMove(e){
@@ -93,14 +108,12 @@
 				this.$refs.scroll.scrollToElement(this.$refs.listGroup[index],200); // 有多个$refs是listGroup的话会变成一个集合取index即可
 			},
 			scroll(pos){
-				console.log(222222)
 				this.scrollY = pos.y;
-				let abs = Math.abs(this.scrollY);
-				let indexKey = this.listHeightGroup.findIndex((item) => {
-					return item > parseInt(abs)
-				})
-				this.currentIndex = indexKey;
-				console.log(this.currentIndex)
+				// let abs = Math.abs(this.scrollY);
+				// let indexKey = this.listHeightGroup.findIndex((item) => {
+				// 	return item > parseInt(abs)
+				// })
+				// this.currentIndex = indexKey;
 			}
 		},
 		computed: { // 计算的对象
@@ -113,6 +126,28 @@
 		components: {
 			Scroll,
 			Loading
+		},
+		watch: {
+			scrollY(newY) { // 监听滚动事件
+				let abs = Math.abs(newY); //去Y轴绝对值
+				let listGroup = this.$refs.listGroup;
+				let indexKey = listGroup.filter((item) => {
+					const dom = item.getElementsByClassName('list-name')[0];
+					return dom.offsetTop <= parseInt(abs) // 对比滚动的值和标题，有多少个标题小于滚动的值
+				})
+				this.currentIndex = indexKey.length - 1;
+				if (newY > 0) {
+					this.fixedTitleName = '';
+				}else{
+					this.fixedTitleName = listGroup[this.currentIndex].getElementsByClassName('list-name')[0].innerHTML
+				}
+				let secondCurrent = listGroup[this.currentIndex + 1]?listGroup[this.currentIndex + 1].getElementsByClassName('list-name')[0].offsetTop:listGroup[this.currentIndex].getElementsByClassName('list-name')[0].offsetTop;
+				if (secondCurrent - parseInt(abs) <= 30 && parseInt(abs) < secondCurrent) {
+					this.$refs.fixedTitle.style.transform = `translate(0,-${(30 - (secondCurrent + newY))}px)`
+				}else{
+					this.$refs.fixedTitle.style.transform = `translate(0,0px)`
+				}
+			}
 		}
 	}
 </script>
@@ -177,6 +212,17 @@
 			.current{
 				color: $color-theme
 			}
+		}
+		.fixed-title{
+			position: absolute;
+			top: 0;
+			width:100%;
+			color: $color-text-l;
+			text-align: left;
+			font-size: $font-size-medium;
+			line-height: 30px;
+			background-color: $color-highlight-background;
+			padding-left: 20px;
 		}
 	}
 </style>
