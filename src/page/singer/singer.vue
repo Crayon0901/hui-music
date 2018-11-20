@@ -1,33 +1,36 @@
 <template>
-	<Scroll :data="singerList" 
-			ref="scroll" 
-			class="scroll" 
-			:listenScroll="true"
-			@scroll="scroll"
-			:probeType="3">
-		<ul class="wrapper-singerList" v-show="reveal">
-			<li v-for="arry in singerListM" ref="listGroup">
-				<div class="list-name">{{arry.name}}</div>
-				<div v-for="item in arry.item">
-					<div class="list-item">
-						<img v-lazy="item.singer_pic.replace('webp','jpg?max_age=2592000')" class="pic" width="60px" height="60px">
-						<span class="singerName">{{item.singer_name}}</span>
+	<div>
+		<Scroll :data="singerList" 
+				ref="scroll" 
+				class="scroll" 
+				:listenScroll="true"
+				@scroll="scroll"
+				:probeType="3">
+			<ul class="wrapper-singerList" v-show="reveal">
+				<li v-for="arry in singerListM" ref="listGroup">
+					<div class="list-name">{{arry.name}}</div>
+					<div v-for="item in arry.item" @click="routerlink(item.singer_id)">
+						<div class="list-item">
+							<img v-lazy="item.singer_pic.replace('webp','jpg?max_age=2592000')" class="pic" width="60px" height="60px">
+							<span class="singerName">{{item.singer_name}}</span>
+						</div>
 					</div>
-				</div>
-			</li>
-		</ul>
-		<div class="wrapper-loading" v-show="!reveal">
-			<Loading></Loading>
-		</div>
-		<div v-show="reveal" @touchstart="handleTouchStart" @touchmove.stop.prevent="handleTouchMove"> <!-- .stop.prevent阻止事件冒泡和事件捕获 -->
-			<ul class="right-list">
-				<li v-for="(item,index) in shortcutList" :data-index="index" :class="{'current':currentIndex===index}">{{item}}</li>
+				</li>
 			</ul>
-		</div>
-		<div class="fixed-title" ref="fixedTitle" v-show="fixedTitleName">
-			{{fixedTitleName}}
-		</div>
-	</Scroll>
+			<div class="wrapper-loading" v-show="!reveal">
+				<Loading></Loading>
+			</div>
+			<div v-show="reveal" @touchstart="handleTouchStart" @touchmove.stop.prevent="handleTouchMove"> <!-- .stop.prevent阻止事件冒泡和事件捕获 -->
+				<ul class="right-list">
+					<li v-for="(item,index) in shortcutList" :data-index="index" :class="{'current':currentIndex===index}">{{item}}</li>
+				</ul>
+			</div>
+			<div class="fixed-title" ref="fixedTitle" v-show="fixedTitleName">
+				{{fixedTitleName}}
+			</div>
+		</Scroll>
+		<router-view></router-view>
+	</div>
 </template>
 
 <script>
@@ -70,19 +73,10 @@
 							item: res.singerList.data.singerlist.slice(0,10)
 						});
 						if (index < 28) {
-							this._getSingerList(index, 160);
+							this._getSingerList(index);
 						}else{
+							console.log(this.singerListM);
 							this.reveal = true;
-							// let height = 0;
-							// const listGroupL = this.$refs.listGroup;
-							// for(let i = 0; i < listGroupL.length;i++){
-							// 	height += listGroupL[i].clientHeight
-							// 	this.listHeightGroup.push(height)
-							// }
-							// // this.$refs.listGroup.forEach((item,index) => {
-							// // 	height += item.clientHeight;
-							// // 	this.listHeightGroup.push(height)
-							// // })
 						}
 					}
 				})
@@ -114,6 +108,12 @@
 				// 	return item > parseInt(abs)
 				// })
 				// this.currentIndex = indexKey;
+			},
+			routerlink(id){
+				console.log(id);
+				this.$router.push({
+					path: `/singer/${id}`
+				})
 			}
 		},
 		computed: { // 计算的对象

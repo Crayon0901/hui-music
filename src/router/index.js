@@ -3,6 +3,7 @@ import Router from 'vue-router'
 // import HelloWorld from '@/components/HelloWorld'
 import Recommend from '@/page/recommend/recommend';
 import Singer from '@/page/singer/singer';
+import SingerDetail from '@/page/singer/singer-detail/singer-detail';
 import Rank from '@/page/rank/rank';
 import Search from '@/page/search/search';
 
@@ -22,7 +23,11 @@ export default new Router({
     {
       path: '/singer',
       name: 'singer',
-      component: Singer
+      component: Singer,
+      children: [{
+        path: ':id',
+        component: SingerDetail
+      }]
     },
     {
       path: '/rank',
