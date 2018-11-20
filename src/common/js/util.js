@@ -1,3 +1,11 @@
+/*
+* @Author: FangXiaoHui
+* @Date:   2018-10-26 11:38:38
+* @Last Modified by:   Administrator
+* @Last Modified time: 2018-11-20 17:44:52
+*/
+
+//随机数（最小，最大）向下取整
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min)
 }
@@ -13,6 +21,8 @@ export function shuffle(arr) {
   return _arr
 }
 
+
+//延迟器，（执行函数，毫秒数）
 export function debounce(func, delay) {
   let timer
 
@@ -26,6 +36,7 @@ export function debounce(func, delay) {
   }
 }
 
+//格式化url，data拼接进url
 export function formatUri(url, data){
   url += (url.indexOf('?') < 0 ? '?' : '') + spliceParams(data);
   return url

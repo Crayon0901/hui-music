@@ -2,7 +2,7 @@
 * @Author: FangXiaoHui
 * @Date:   2018-11-01 11:00:07
 * @Last Modified by:   Administrator
-* @Last Modified time: 2018-11-15 17:24:04
+* @Last Modified time: 2018-11-20 17:01:12
 */
 export default {
 	RECOMMEND_BANNER_URL: 'https://c.y.qq.com/musichall/fcgi-bin/fcg_yqqhomepagerecommend.fcg',// 获取推荐banner的url
@@ -19,5 +19,6 @@ export default {
 	},
 	SINGER_LIST: 'https://u.y.qq.com/cgi-bin/musicu.fcg',
 	RANK_LIST: 'https://c.y.qq.com/v8/fcg-bin/fcg_myqq_toplist.fcg',
-	GETHOTKEY: 'https://c.y.qq.com/splcloud/fcgi-bin/gethotkey.fcg'
+	GETHOTKEY: 'https://c.y.qq.com/splcloud/fcgi-bin/gethotkey.fcg',
+	SINGER_DETAIL: 'https://c.y.qq.com/v8/fcg-bin/fcg_v8_singer_track_cp.fcg'
 }

@@ -3,7 +3,7 @@ import constants from '@/common/constants/constants';
 import axios from 'axios';
 import api from './api';
 
-const {SINGER_LIST, RECOMMEND_BANNER_URL_PARAMS, OPTION} = constants;
+const {SINGER_LIST, RECOMMEND_BANNER_URL_PARAMS, OPTION, SINGER_DETAIL} = constants;
 
 export function getSingerlist(index=-100, sin=0){
 	let paramsData = {
@@ -33,19 +33,19 @@ export function getSingerlist(index=-100, sin=0){
 		data: JSON.stringify(paramsData)
 	});
 	return jsonp(SINGER_LIST, data)
+}
 
-	// const url = 'https://c.y.qq.com/v8/fcg-bin/v8.fcg'
-
-	// const data = Object.assign({}, RECOMMEND_BANNER_URL_PARAMS, {
-	// channel: 'singer',
-	// page: 'list',
-	// key: 'all_all_all',
-	// pagesize: 100,
-	// pagenum: 1,
-	// hostUin: 0,
-	// needNewCode: 0,
-	// platform: 'yqq'
-	// })
-
-	// return jsonp(url, data, OPTION)
+export function getSingerDetail(id){
+	const data = Object.assign({}, RECOMMEND_BANNER_URL_PARAMS, {
+		loginUin: 0,
+		hostUin: 0,
+		platform: 'yqq',
+		needNewCode: 0,
+		singermid: id,
+		order: 'listen',
+		begin: 0,
+		num: 100,
+		songstatus: 1
+	})
+	return jsonp(SINGER_DETAIL, data, OPTION)
 }

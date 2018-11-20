@@ -9,7 +9,7 @@
 			<ul class="wrapper-singerList" v-show="reveal">
 				<li v-for="arry in singerListM" ref="listGroup">
 					<div class="list-name">{{arry.name}}</div>
-					<div v-for="item in arry.item" @click="routerlink(item.singer_id)">
+					<div v-for="item in arry.item" @click="routerlink(item)">
 						<div class="list-item">
 							<img v-lazy="item.singer_pic.replace('webp','jpg?max_age=2592000')" class="pic" width="60px" height="60px">
 							<span class="singerName">{{item.singer_name}}</span>
@@ -38,6 +38,7 @@
 	import Scroll from 'components/scroll/scroll';
 	import Loading from 'components/loading/loading';
 	import {getData} from 'common/js/dom';
+	import {mapMutations} from 'vuex';
 
 	let index = 0;
 	let firstTouch = {};
@@ -73,7 +74,7 @@
 							item: res.singerList.data.singerlist.slice(0,10)
 						});
 						if (index < 28) {
-							this._getSingerList(index);
+							this._getSingerList(index, 160);
 						}else{
 							console.log(this.singerListM);
 							this.reveal = true;
@@ -109,12 +110,15 @@
 				// })
 				// this.currentIndex = indexKey;
 			},
-			routerlink(id){
-				console.log(id);
+			routerlink(item){
 				this.$router.push({
-					path: `/singer/${id}`
+					path: `/singer/${item.singer_mid}`
 				})
-			}
+				this.setSinger(item)
+			},
+			...mapMutations({ // 映射一个mutation
+				setSinger: 'SET_SINGER' // 重命名SET_SINGER的mutation为setsinger
+			})
 		},
 		computed: { // 计算的对象
 			shortcutList(){

@@ -1,19 +1,10 @@
-import {playMode} from 'common/js/config'
-import {loadSearch, loadPlay, loadFavorite} from 'common/js/cache'
-
+/*
+* @Author: FangXiaoHui
+* @Date:   2018-11-01 16:56:52
+* @Last Modified by:   Administrator
+* @Last Modified time: 2018-11-20 15:56:55
+*/
 const state = {
-  singer: {},
-  playing: false,
-  fullScreen: false,
-  playlist: [],
-  sequenceList: [],
-  mode: playMode.sequence,
-  currentIndex: -1,
-  disc: {},
-  topList: {},
-  searchHistory: loadSearch(),
-  playHistory: loadPlay(),
-  favoriteList: loadFavorite()
+  singer: {}
 }
-
-export default state
+ export default state
