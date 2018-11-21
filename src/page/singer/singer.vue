@@ -11,8 +11,8 @@
 					<div class="list-name">{{arry.name}}</div>
 					<div v-for="item in arry.item" @click="routerlink(item)">
 						<div class="list-item">
-							<img v-lazy="item.singer_pic.replace('webp','jpg?max_age=2592000')" class="pic" width="60px" height="60px">
-							<span class="singerName">{{item.singer_name}}</span>
+							<img v-lazy="item.avatar" class="pic" width="60px" height="60px">
+							<span class="singerName">{{item.name}}</span>
 						</div>
 					</div>
 				</li>
@@ -39,6 +39,7 @@
 	import Loading from 'components/loading/loading';
 	import {getData} from 'common/js/dom';
 	import {mapMutations} from 'vuex';
+	import {createdSinger} from 'common/js/singer';
 
 	let index = 0;
 	let firstTouch = {};
@@ -71,7 +72,9 @@
 						this.singerList.push(...res.singerList.data.singerlist.slice(0,10));
 						this.singerListM.push({
 							name: letter.name,
-							item: res.singerList.data.singerlist.slice(0,10)
+							item: res.singerList.data.singerlist.slice(0,10).map((item) => {
+								return createdSinger(item)
+							})
 						});
 						if (index < 28) {
 							this._getSingerList(index, 160);
@@ -104,15 +107,10 @@
 			},
 			scroll(pos){
 				this.scrollY = pos.y;
-				// let abs = Math.abs(this.scrollY);
-				// let indexKey = this.listHeightGroup.findIndex((item) => {
-				// 	return item > parseInt(abs)
-				// })
-				// this.currentIndex = indexKey;
 			},
 			routerlink(item){
 				this.$router.push({
-					path: `/singer/${item.singer_mid}`
+					path: `/singer/${item.mid}`
 				})
 				this.setSinger(item)
 			},
