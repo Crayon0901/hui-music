@@ -50,11 +50,14 @@
 			},
 			scrollAction(y){
 				const Imageheight = this.$refs.BGImage.clientHeight;
+				const SongListHeight = this.$refs.wrapperSongList.offsetTop;
+				console.log(SongListHeight,y)
 				if (Imageheight - 44 + y > 0) {
-					console.log(songListHeight,y)
 					this.isMaxHeight = false;
 					this.$refs.layer.style['transform'] = `translate3d(0,${y}px,0)`;
+					// this.$refs.wrapperSongList.style.top = (Imageheight + y) + 'px'
 				}else{
+					this.$refs.wrapperSongList.style.overflow = 'hidden';
 					// this.isMaxHeight = true;
 				}
 			}
