@@ -2,7 +2,7 @@
 * @Author: FangXiaoHui
 * @Date:   2018-10-26 11:38:38
 * @Last Modified by:   Administrator
-* @Last Modified time: 2018-11-20 17:44:52
+* @Last Modified time: 2018-11-22 11:15:05
 */
 
 //随机数（最小，最大）向下取整
@@ -10,6 +10,7 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
+//数组随机顺序打乱
 export function shuffle(arr) {
   let _arr = arr.slice()
   for (let i = 0; i < _arr.length; i++) {

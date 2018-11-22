@@ -77,7 +77,7 @@
 							})
 						});
 						if (index < 28) {
-							this._getSingerList(index, 160);
+							this._getSingerList(index);
 						}else{
 							console.log(this.singerListM);
 							this.reveal = true;
