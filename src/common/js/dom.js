@@ -41,6 +41,7 @@ let vendor = (() => {
   return false
 })()
 
+//判断浏览器是否支持这种属性
 export function prefixStyle(style) {
   if (vendor === false) {
     return false

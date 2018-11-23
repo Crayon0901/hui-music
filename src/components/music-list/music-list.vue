@@ -1,13 +1,13 @@
 <template>
 	<div class="wrapper">
-		<div class="title">
-			<div class="back-btn" @click="back">
-				<i class="icon-back"></i>
-			</div>
+		<div class="back-btn" @click="back">
+			<i class="icon-back"></i>
+		</div>
+		<div class="title" ref="Title">
 			<h2 class="title-text">{{title}}</h2>
 		</div>
 		<div class="bg-image" :style="bgStyle" ref="BGImage">
-			<div class="play-wrapper">
+			<div class="play-wrapper" ref="playBtn">
 				<div class="play">
 					<i class="icon-play"></i>
 					<span class="text">随机播放全部</span>
@@ -17,7 +17,7 @@
 		</div>
 		<div class="bg-layer" ref="layer"></div>
 		<div class="wrapper-songlist" ref="wrapperSongList">
-			<songList :songs="songs" @scroll="scrollAction" :isMaxHeight="isMaxHeight"></songList>
+			<songList :songs="songs" @scroll="scrollAction"></songList>
 		</div>
 	</div>
 </template>
@@ -39,27 +39,35 @@
 				default: []
 			}
 		},
-		data(){
-			return {
-				isMaxHeight: false
-			}
-		},
 		methods: {
 			back(){
 				this.$router.back();
 			},
 			scrollAction(y){
-				const Imageheight = this.$refs.BGImage.clientHeight;
-				const SongListHeight = this.$refs.wrapperSongList.offsetTop;
-				console.log(SongListHeight,y)
-				if (Imageheight - 44 + y > 0) {
-					this.isMaxHeight = false;
+		        let scale = 1;
+		        let blur = 0;
+				const percent = Math.abs(y / this.Imageheight)
+				if (this.Imageheight - this.Titleheight + y > 0) {
 					this.$refs.layer.style['transform'] = `translate3d(0,${y}px,0)`;
-					// this.$refs.wrapperSongList.style.top = (Imageheight + y) + 'px'
+					this.$refs.BGImage.style.paddingTop = '70%';
+					this.$refs.BGImage.style.height = 0;
+					this.$refs.playBtn.style.display = '';
+					this.$refs.BGImage.style.zIndex = 0;
 				}else{
-					this.$refs.wrapperSongList.style.overflow = 'hidden';
-					// this.isMaxHeight = true;
+					this.$refs.BGImage.style.zIndex = 2;
+					this.$refs.BGImage.style.paddingTop = 0;
+					this.$refs.BGImage.style.height = `${this.Titleheight}px`;
+					this.$refs.playBtn.style.display = 'none'
 				}
+		        if (y > 0) {
+					scale = 1 + percent;
+			        this.$refs.BGImage.style.zIndex = 2;
+		        	console.log(222222222)
+		        } else {
+					blur = Math.min(20, percent * 20)
+		        }
+		        this.$refs.filter.style['backdrop'] = `blur(${blur}px)`
+		        this.$refs.BGImage.style['transform'] = `scale(${scale})`;
 			}
 		},
 		computed: {
@@ -69,6 +77,8 @@
 		},
 		mounted(){
 			this.$refs.wrapperSongList.style.top = this.$refs.BGImage.clientHeight + 'px';
+			this.Imageheight = this.$refs.BGImage.clientHeight;
+			this.Titleheight = this.$refs.Title.clientHeight;
 		},
 		components: {
 			songList
@@ -86,7 +96,19 @@
 		bottom: 0;
 		left: 0;
 		background-color: $color-background;
-		z-index: 99;
+		z-index: 100;
+		.back-btn{
+			position: absolute;
+			top: 0;
+			left: 6px;
+			z-index: 4;
+			text-align: center;
+			.icon-back{
+				display: block;
+				padding: 10px;
+				font-size: $font-size-large-x;
+			}
+		}
 		.title{
 			position: absolute;
 			top: 0;
@@ -96,36 +118,23 @@
 			text-align: center;
 			font-size: $font-size-large;
 			line-height: 40px;
-			z-index: 50;
+			z-index: 3;
 			no-wrap();
-			.back-btn{
-				position: absolute;
-				top: 0;
-				left: 6px;
-				z-index: 40;
-				text-align: center;
-				.icon-back{
-					display: block;
-					padding: 10px;
-					font-size: $font-size-large-x;
-				}
-			}
 			.title-text{
 				color: $color-text;
 			}
 		}
 		.bg-image{
-			background-image: url('~common/image/logo@2x.png');
 			position: relative;
 			width: 100%;
 			height: 0;
-			padding-top: 70%;
+			padding-top: 70%; /*width: 100%;padding-top: 70%;,设置了宽高比为10：7*/
 			transform-origin: top; /*旋转的中心点,top,right*/
 			background-size: cover;
+			z-index: 0;
 			.play-wrapper{
 				position: absolute;
 				bottom: 20px;
-				z-index: 50;
 				width: 100%;
 				.play{
 					box-sizing: border-box;
@@ -151,6 +160,7 @@
 				}
 			}
 			.filter{
+				z-index: -1;
 				position: absolute;
 				top: 0;
 				bottom: 0;
@@ -162,7 +172,6 @@
 			position: relative;
 			height: 100%;
 			background: $color-background;
-		    z-index: 60;
 		}
 		.wrapper-songlist{
 			position: fixed;
@@ -170,7 +179,6 @@
 			bottom: 0;
 			width: 100%;
 			background: $color-background;
-			z-index: 60;
 		}
 	}
 </style>
