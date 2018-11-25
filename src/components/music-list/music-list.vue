@@ -17,13 +17,14 @@
 		</div>
 		<div class="bg-layer" ref="layer"></div>
 		<div class="wrapper-songlist" ref="wrapperSongList">
-			<songList :songs="songs" @scroll="scrollAction"></songList>
+			<songList :songs="songs" @scroll="scrollAction" @selectItem="selectItem"></songList>
 		</div>
 	</div>
 </template>
 
 <script>
 	import songList from 'components/song-list/song-list';
+	import {mapActions} from 'vuex';
 	export default {
 		props: {
 			title: {
@@ -62,13 +63,22 @@
 		        if (y > 0) {
 					scale = 1 + percent;
 			        this.$refs.BGImage.style.zIndex = 2;
-		        	console.log(222222222)
 		        } else {
 					blur = Math.min(20, percent * 20)
 		        }
 		        this.$refs.filter.style['backdrop'] = `blur(${blur}px)`
 		        this.$refs.BGImage.style['transform'] = `scale(${scale})`;
-			}
+			},
+			selectItem(songs, item, index){
+				// 拿到全部播放的songlist，和当前点击的index，这个时候就需要去mutations多个state，可以使用acion封装统一修改
+				this.selectplay({
+					list: songs,
+					index
+				})
+			},
+			...mapActions([
+				'selectplay'
+			])
 		},
 		computed: {
 			bgStyle(){

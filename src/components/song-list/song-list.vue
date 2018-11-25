@@ -2,7 +2,7 @@
 	<Scroll :data="songs" class="wrapper-scroll" :probeType="3" :listenScroll="true" @scroll="scrollAction" :style="hasmaxhight">
 		<div class="format">
 			<ul>
-				<li v-for="item in songs" class="songsitem">
+				<li v-for="(item,index) in songs" class="songsitem" @click="selectItem(songs, item, index)">
 					<h2 class="name">{{item.name}}</h2>
 					<p class="desc">{{getDesc(item)}}</p>
 				</li>
@@ -34,6 +34,9 @@
 			},
 			scrollAction(pos){
 				this.$emit('scroll',pos.y)
+			},
+			selectItem(songs, item, index){
+				this.$emit('selectItem', songs, item, index);
 			}
 		},
 		computed: {

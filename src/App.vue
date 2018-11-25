@@ -5,17 +5,20 @@
     <keep-alive> <!-- 包裹的内容会被添加到缓存里面，不会每次都重新加载一次 -->
       <router-view></router-view>
     </keep-alive>
+    <Player></Player>
   </div>
 </template>
 
 <script>
 import MHeader from 'components/m-header/m-header';
 import Tab from 'components/tab/tab';
+import Player from 'components/player/player';
 export default {
   name: 'App',
   components: {
     MHeader,
-    Tab
+    Tab,
+    Player
   }
 }
 </script>
