@@ -14,7 +14,7 @@
 					<div class="middle-l">
 						<div class="cd-wrapper">
 							<div class="cd">
-	                			<img class="image" :src="this.currentSong.image">
+	                			<img class="image" :class="rotateImage" :src="this.currentSong.image">
 	            			</div>
 						</div>
 					</div>
@@ -25,13 +25,13 @@
 							<i class="icon-sequence"></i>
 						</div>
 						<div class="icon i-left">
-							<i class="icon-prev"></i>
+							<i class="icon-prev" @click="prevSong"></i>
 						</div>
 						<div class="icon i-center">
 							<i :class="playIcon" @click="togglePlaying"></i>
 						</div>
 						<div class="icon i-right">
-							<i class="icon-next"></i>
+							<i class="icon-next" @click="nextSong"></i>
 						</div>
 						<div class="icon i-right">
 							<i class="icon icon-not-favorite"></i>
@@ -43,14 +43,14 @@
 		<transition name="mini">
 			<div class="mini-player" v-show="!this.fullVisiblePlayer" @click="showNormalPlayer">
 				<div class="mini-image">
-					<img :src="this.currentSong.image" alt="">
+					<img :src="this.currentSong.image" alt="" class="miniImage" :class="rotateImage">
 				</div>
 				<div class="text">
 					<p class="song-name">{{this.currentSong.name}}</p>
 					<p class="singer-name">{{this.currentSong.singer}}</p>
 				</div>
 				<div class="playIcon">
-					<i class="icon-play-mini"></i>
+					<i :class="miniplayIcon" @click.stop.prevent="togglePlaying"></i>
 				</div>
 				<div class="listIcon">
 					<i class="icon-playlist"></i>
@@ -64,15 +64,9 @@
 <script>
 	import {mapGetters, mapMutations} from 'vuex';
 	export default {
-		
 		methods: {
 			togglePlaying(){
 				this.set_playing(!this.playing)
-				if (this.playing) {
-					this.$refs.audio.play()
-				}else{
-					this.$refs.audio.pause()
-				}
 			},
 			showMiniPlayer(){
 				this.set_full_play(false);
@@ -80,9 +74,20 @@
 			showNormalPlayer(){
 				this.set_full_play(true);
 			},
+			nextSong(){
+				const index = (this.currentIndex + 1 >= this.playList.length) ? 0 : this.currentIndex+1
+				this.set_current_index(index)
+				this.set_playing(true)
+			},
+			prevSong(){
+				const index = this.currentIndex - 1 < 0 ? this.playList.length-1 : this.currentIndex-1
+				this.set_current_index(index)
+				this.set_playing(true)
+			},
 			...mapMutations({
 				set_playing: 'SET_PLAYING',
-				set_full_play: 'SET_FULL_VISIBLE_PLAYER'
+				set_full_play: 'SET_FULL_VISIBLE_PLAYER',
+				set_current_index: 'SET_CURRENTINDEX'
 			})
 		},
 		computed: {
@@ -92,12 +97,37 @@
 			playIcon() {
 				return this.playing ? 'icon-pause' : 'icon-play'
 			},
+			miniplayIcon(){
+				return this.playing ? 'icon-pause-mini' : 'icon-play-mini'
+			},
+			rotateImage(){
+				return this.playing ? 'rotateIng' : 'rotateed'
+			},
 			...mapGetters([
 				'fullVisiblePlayer',
 				'playList',
 				'currentSong',
-				'playing'
+				'playing',
+				'currentIndex'
 			])
+		},
+		watch: {
+			 // 监听currentSong的话，切换歌曲时这个字段内容会改变，所以play()还是会执行，如果只是监听playing，切换歌曲时，值还是true，并没有改变，还是不会执行play()
+			currentSong(){
+				this.$nextTick(() => {
+					this.$refs.audio.play()
+				})
+			},
+			playing(newvalue){
+				const audio = this.$refs.audio;
+				if (newvalue) {
+					this.$nextTick(() => {
+						audio.play()
+					})
+				}else{
+					audio.pause();
+				}
+			}
 		}
 	}
 </script>
@@ -105,6 +135,10 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
 	@import '~common/stylus/variable';
 	@import '~common/stylus/mixin';
+	@keyframes foo {
+		from {transform: rotate(0deg)}
+		to {transform: rotate(360deg)}
+	}
 	.normal-enter-active, .normal-leave-active{
 		transition: all .4s
 		.top, .footer{
@@ -223,6 +257,13 @@
 								width: 100%;
 								height: 100%;
 								border-radius: 50%;
+								animation: foo 60s linear 0s infinite normal forwards
+							}
+							.rotateIng{
+								animation-play-state:running;
+							}
+							.rotateed{
+								animation-play-state:paused;
 							}
 						}
 					}
@@ -281,6 +322,13 @@
 					width: 40px;
 					height: 40px;
 					border-radius: 50%;
+					animation: foo 60s linear 0s infinite normal forwards
+				}
+				.rotateIng{
+					animation-play-state:running;
+				}
+				.rotateed{
+					animation-play-state:paused;
 				}
 			}
 			.text{
