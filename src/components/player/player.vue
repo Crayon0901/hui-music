@@ -57,16 +57,25 @@
 				</div>
 			</div>
 		</transition>
-		<audio style="display: none;" ref="audio" :src="this.currentSong.url"></audio>
+		<audio style="display: none;" ref="audio" :src="this.currentSong.url" @canplay="ready" @error="error" @ended="ended"></audio>
 	</div>
 </template>
 
 <script>
 	import {mapGetters, mapMutations} from 'vuex';
 	export default {
+		data(){
+			return {
+				isready: false
+			}
+		},
 		methods: {
 			togglePlaying(){
-				this.set_playing(!this.playing)
+				if (!this.isready) { // 防止连续点击出现src还没有加载好报错的问题
+					return
+				}
+				this.set_playing(!this.playing);
+				// this.isready = false;
 			},
 			showMiniPlayer(){
 				this.set_full_play(false);
@@ -75,14 +84,31 @@
 				this.set_full_play(true);
 			},
 			nextSong(){
-				const index = (this.currentIndex + 1 >= this.playList.length) ? 0 : this.currentIndex+1
-				this.set_current_index(index)
-				this.set_playing(true)
+				if (!this.isready) { // 防止连续点击出现src还没有加载好报错的问题
+					return
+				}
+				const index = (this.currentIndex + 1 >= this.playList.length) ? 0 : this.currentIndex+1;
+				this.set_current_index(index);
+				this.set_playing(true);
+				this.isready = false;
 			},
 			prevSong(){
-				const index = this.currentIndex - 1 < 0 ? this.playList.length-1 : this.currentIndex-1
-				this.set_current_index(index)
-				this.set_playing(true)
+				if (!this.isready) { // 防止连续点击出现src还没有加载好报错的问题
+					return
+				}
+				const index = this.currentIndex - 1 < 0 ? this.playList.length-1 : this.currentIndex-1;
+				this.set_current_index(index);
+				this.set_playing(true);
+				this.isready = false;
+			},
+			ready(){ // audio的属性，src加载完毕可以播放时候会调用这个方法，表示歌曲已经就绪可以播放
+				this.isready = true;
+			},
+			error(){
+				this.isready = true;
+			},
+			ended(){ // 播放结束时候调用
+				this.nextSong()
 			},
 			...mapMutations({
 				set_playing: 'SET_PLAYING',
@@ -92,7 +118,7 @@
 		},
 		computed: {
 			backgroundImage(){
-				return this.currentSong.image ? `background: url('${this.currentSong.image}') no-repeat center center;    background-size: 100% 100%;` : ''
+				return this.currentSong.image ? `background: url('${this.currentSong.image}') center center / 100% 100% no-repeat;` : ''
 			},
 			playIcon() {
 				return this.playing ? 'icon-pause' : 'icon-play'
@@ -102,6 +128,11 @@
 			},
 			rotateImage(){
 				return this.playing ? 'rotateIng' : 'rotateed'
+			},
+			currentTime(){
+				return this.$nextTick(() => {
+					return this.$refs.audio.currentTime ? this.$refs.audio.currentTime : 0
+				})
 			},
 			...mapGetters([
 				'fullVisiblePlayer',
@@ -127,6 +158,9 @@
 				}else{
 					audio.pause();
 				}
+			},
+			currentTime(newvalue){
+				console.log(newvalue)
 			}
 		}
 	}

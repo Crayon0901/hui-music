@@ -1,6 +1,7 @@
 <template>
-	<div>
-		<h3>热门搜索</h3>
+	<div class="wrapper-search">
+		<SearchBox @change="handleChangeSerach"></SearchBox>
+		<h3 class="title-text">热门搜索</h3>
 		<div>
 			<ul class="list-ul">
 				<li v-for="item in hotkeyList" class="song-name">{{item.k}}</li>
@@ -10,7 +11,8 @@
 </template>
 
 <script>
-	import {gethotkey} from 'api/search';
+	import {gethotkey, getserach} from 'api/search';
+	import SearchBox from 'components/search-box/search-box';
 	export default{
 		data(){
 			return {
@@ -30,10 +32,16 @@
 
 					}
 				})
+			},
+			handleChangeSerach(value){
+				this._getserach(value)
+			},
+			_getserach(text){
+				getserach(text).then((res) => {console.log(res)})
 			}
 		},
 		components:{
-
+			SearchBox
 		},
 		computed: { // 计算的对象
 			randomList(){
@@ -53,18 +61,27 @@
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
 	@import '~common/stylus/variable';
-	.list-ul{
-		text-align:left;
-		padding: 0 10px;
-		.song-name{
-			display:inline-block;
+	.wrapper-search{
+		padding: 0 15px;
+		.title-text{
 			font-size: $font-size-medium;
-			line-height: 30px;
-			padding: 0 10px;
-			border:1px solid #ccc;
-			border-radius: 20px;
-			margin-right: 14px;
-			margin-bottom: 10px;
+			color: $color-text-d;
+			padding: 10px 0;
+			text-align: left;
+		}
+		.list-ul{
+			text-align:left;
+			.song-name{
+				background-color: $color-highlight-background;
+				display:inline-block;
+				font-size: $font-size-medium;
+				color: $color-text-d;
+				line-height: 30px;
+				padding: 0 10px;
+				border-radius: 5px;
+				margin-right: 15px;
+				margin-bottom: 15px;
+			}
 		}
 	}
 </style>
