@@ -2,7 +2,7 @@
 	<div class="search-box">
 		<i class="icon-search"></i>
 		<input type="text" v-model="text" name="search" class="search" :placeholder="placeholder">
-		<i class="icon-dismiss" v-show="text"></i>
+		<i class="icon-dismiss" @click="clearText" v-show="text"></i>
 	</div>
 </template>
 
@@ -20,6 +20,12 @@
 			}
 		},
 		methods: {
+			clearText(){
+				this.text = '';
+			},
+			setText(text){
+				this.text = text;
+			}
 		},
 		watch: {
 			text(newValue){

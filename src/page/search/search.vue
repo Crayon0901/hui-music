@@ -1,23 +1,41 @@
 <template>
 	<div class="wrapper-search">
-		<SearchBox @change="handleChangeSerach"></SearchBox>
+		<SearchBox ref="searchbox" @change="handleChangeSerach"></SearchBox>
 		<h3 class="title-text">热门搜索</h3>
 		<div>
 			<ul class="list-ul">
-				<li v-for="item in hotkeyList" class="song-name">{{item.k}}</li>
+				<li v-for="item in hotkeyList" class="song-name" @click="selectKey(item.k)">{{item.k}}</li>
 			</ul>
 		</div>
+		<div class="search-result" v-show="this.serachValue">
+			<SearchResult :songs="resultList.songs"
+						  :singer="resultList.singer"
+						  @selectSinger="selectSinger"
+						  @selectSongs="selectSongs">
+			</SearchResult>
+		</div>
+		<router-view></router-view>
 	</div>
 </template>
 
 <script>
 	import {gethotkey, getserach} from 'api/search';
 	import SearchBox from 'components/search-box/search-box';
+	import {createSong} from 'common/js/song';
+	import {createdSinger} from 'common/js/singer';
+	import SearchResult from 'components/search-result/search-result';
+	import {mapMutations} from 'vuex';
+
 	export default{
 		data(){
 			return {
 				hotkeyList: [], // 标签list
-				special_key: '' // 主标签
+				special_key: '', // 主标签
+				resultList: { // 搜索结果列表
+					songs: [], // 歌曲列表
+					singer: {} // 歌手列表
+				},
+				serachValue: '' // 搜索的文本
 			}
 		},
 		created(){
@@ -33,15 +51,45 @@
 					}
 				})
 			},
-			handleChangeSerach(value){
-				this._getserach(value)
+			selectKey(key){
+				this.$refs.searchbox.setText(key);
 			},
-			_getserach(text){
-				getserach(text).then((res) => {console.log(res)})
-			}
+			handleChangeSerach(value){
+				this.serachValue = value;
+				this._getserach()
+			},
+			selectSinger(item){
+				this.$router.push({
+					path: `/search/${item.mid}`
+				})
+				this.setSinger(item)
+			},
+			selectSongs(item){
+				console.log(item);
+			},
+			_getserach(){
+				getserach(this.serachValue).then((res) => {
+					if (res.code === 0) {
+						const {song, zhida} = res.data;
+						this.resultList.songs = song.list.map((item) => {
+							return createSong(item)
+						});
+						this.resultList.singer = createdSinger({
+							singer_id: zhida.singerid,
+							singer_name: zhida.singername,
+							singer_mid: zhida.singermid
+						});
+						console.log(this.resultList);
+					}
+				})
+			},
+			...mapMutations({ // 映射一个mutation
+				setSinger: 'SET_SINGER' // 重命名SET_SINGER的mutation为setsinger
+			})
 		},
 		components:{
-			SearchBox
+			SearchBox,
+			SearchResult
 		},
 		computed: { // 计算的对象
 			randomList(){
@@ -82,6 +130,14 @@
 				margin-right: 15px;
 				margin-bottom: 15px;
 			}
+		}
+		.search-result{
+			position: fixed;
+			bottom: 0;
+			top: 129px;
+			left: 0;
+			right: 0;
+			padding: 0 15px;
 		}
 	}
 </style>
