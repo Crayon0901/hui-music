@@ -46,6 +46,22 @@ apiRoutes.get('/lyric', function (req, res) {
     console.log(e)
   })
 })
+//搜索歌曲
+apiRoutes.get('/api/getSerach',(req,res)=>{
+  const url = 'https://c.y.qq.com/soso/fcgi-bin/search_for_qq_cp';
+  axios.get(url, {
+    headers: {
+      referer: 'https://c.y.qq.com/',
+      host: 'c.y.qq.com'
+    },
+    params: req.query  //这是请求的query
+  }).then((response) => {
+    //response是api地址返回的，数据在data里。
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e);
+  })
+});
 
 app.use('/api', apiRoutes)
 
