@@ -24,7 +24,7 @@
 	import {createSong} from 'common/js/song';
 	import {createdSinger} from 'common/js/singer';
 	import SearchResult from 'components/search-result/search-result';
-	import {mapMutations} from 'vuex';
+	import {mapGetters, mapActions, mapMutations} from 'vuex';
 
 	export default{
 		data(){
@@ -65,7 +65,12 @@
 				this.setSinger(item)
 			},
 			selectSongs(item){
-				console.log(item);
+				let newPlayList = this.playList.concat();
+				newPlayList.push(item);
+				this.selectplay({
+					list: newPlayList,
+					index: newPlayList.length - 1
+				})
 			},
 			_getserach(){
 				getserach(this.serachValue).then((res) => {
@@ -83,8 +88,11 @@
 					}
 				})
 			},
-			...mapMutations({ // 映射一个mutation
-				setSinger: 'SET_SINGER' // 重命名SET_SINGER的mutation为setsinger
+			...mapActions([
+				'selectplay'
+			]),
+			...mapMutations({
+				setSinger: 'SET_SINGER'
 			})
 		},
 		components:{
@@ -102,7 +110,10 @@
 					newList.splice(num, 1);
 				}
 				return arr
-			}
+			},
+			...mapGetters([
+				'playList'
+			])
 		}
 	}
 </script>

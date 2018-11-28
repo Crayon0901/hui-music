@@ -25,7 +25,6 @@ apiRoutes.get('/getDiscList', function (req, res) {
 
 apiRoutes.get('/lyric', function (req, res) {
   var url = 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg'
-
   axios.get(url, {
     headers: {
       referer: 'https://c.y.qq.com/',
@@ -47,7 +46,7 @@ apiRoutes.get('/lyric', function (req, res) {
   })
 })
 //搜索歌曲
-apiRoutes.get('/api/getSerach',(req,res)=>{
+apiRoutes.get('/getSerach',function(req,res) {
   const url = 'https://c.y.qq.com/soso/fcgi-bin/search_for_qq_cp';
   axios.get(url, {
     headers: {
@@ -56,6 +55,7 @@ apiRoutes.get('/api/getSerach',(req,res)=>{
     },
     params: req.query  //这是请求的query
   }).then((response) => {
+    console.log(response)
     //response是api地址返回的，数据在data里。
     res.json(response.data)
   }).catch((e) => {
