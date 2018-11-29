@@ -71,15 +71,10 @@
 		},
 		methods: {
 			togglePlaying(){
-				// if (!this.isready) { // 防止连续点击出现src还没有加载好报错的问题
-				// 	return
-				// }
-				this.set_playing(!this.playing);
-				if (!!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) && this.playing) {
-					this.$refs.audio.play()
-				}else{
-					this.$refs.audio.pause()
+				if (!this.isready) { // 防止连续点击出现src还没有加载好报错的问题
+					return
 				}
+				this.set_playing(!this.playing);
 				// this.isready = false;
 			},
 			showMiniPlayer(){
@@ -107,9 +102,11 @@
 				this.isready = false;
 			},
 			ready(){ // audio的属性，src加载完毕可以播放时候会调用这个方法，表示歌曲已经就绪可以播放
+				console.log('就绪')
 				this.isready = true;
 			},
 			error(){
+				console.log('出错')
 				this.isready = true;
 			},
 			ended(){ // 播放结束时候调用
@@ -150,10 +147,6 @@
 		watch: {
 			 // 监听currentSong的话，切换歌曲时这个字段内容会改变，所以play()还是会执行，如果只是监听playing，切换歌曲时，值还是true，并没有改变，还是不会执行play()
 			currentSong(){
-				console.log(!!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/),this.playing)
-				if (!!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) && this.playing) {
-					this.$refs.audio.play()
-				}
 				this.$nextTick(() => {
 					this.$refs.audio.play()
 				})
