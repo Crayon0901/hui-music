@@ -1,7 +1,7 @@
 <template>
 	<Scroll class="result-scroll" :data="songs">
 		<div class="wrapper-result">
-			<div v-show="this.singer.name" class="list-row" @click="selectSinger">
+			<div v-show="this.singer && this.singer.name" class="list-row" @click="selectSinger">
 				<i class="icon-mine iconType"></i>
 				<p class="text" v-html="getSingerName"></p>
 			</div>
@@ -25,11 +25,11 @@
 		props: {
 			singer: {
 				type: Object,
-				default: {}
+				default: () => {return {}}
 			},
 			songs: {
 				type: Array,
-				default: []
+				default: () => []
 			}
 		},
 		methods: {
