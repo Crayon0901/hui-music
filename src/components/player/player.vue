@@ -40,6 +40,14 @@
 				</div>
 			</div>
 		</transition>
+		<transition name="playerList">
+			<div class="player-list" v-show="showPlayerList">
+				<div class="top-list">
+					<SearchResult :songs="this.playList"></SearchResult>
+				</div>
+				<div class="floot-btn" @click.stop.prevent="toggleList">关闭</div>
+			</div>
+		</transition>
 		<transition name="mini">
 			<div class="mini-player" v-show="!this.fullVisiblePlayer" @click="showNormalPlayer">
 				<div class="mini-image">
@@ -53,7 +61,7 @@
 					<i :class="miniplayIcon" @click.stop.prevent="togglePlaying"></i>
 				</div>
 				<div class="listIcon">
-					<i class="icon-playlist"></i>
+					<i class="icon-playlist" @click.stop.prevent="toggleList"></i>
 				</div>
 			</div>
 		</transition>
@@ -63,10 +71,12 @@
 
 <script>
 	import {mapGetters, mapMutations} from 'vuex';
+	import SearchResult from 'components/search-result/search-result';
 	export default {
 		data(){
 			return {
-				isready: false
+				isready: false,
+				showPlayerList: false
 			}
 		},
 		methods: {
@@ -111,6 +121,10 @@
 			},
 			ended(){ // 播放结束时候调用
 				this.nextSong()
+			},
+			toggleList(){
+				console.log(this.showPlayerList);
+				this.showPlayerList = !this.showPlayerList;
 			},
 			...mapMutations({
 				set_playing: 'SET_PLAYING',
@@ -164,6 +178,9 @@
 			currentTime(newvalue){
 				console.log(newvalue)
 			}
+		},
+		components: {
+			SearchResult
 		}
 	}
 </script>
@@ -203,6 +220,12 @@
 				}
 			}
 		}
+	}
+	.playerList-enter-active, .playerList-leave-active{
+		transition: all .2s
+	}
+	.playerList-enter, .playerList-leave-to{
+		transform: translate3d(0, 100%, 0);
 	}
 	.mini-enter-active, .mini-leave-active{
 		transition: all .4s
@@ -338,6 +361,38 @@
 						color: color-sub-theme;
 					}
 				}
+			}
+		}
+		.player-list{
+			position: fixed;
+			width: 100%;
+			bottom: 0;
+			top: 100px;
+			z-index: 160;
+			background-color: $color-highlight-background;
+			border-top-left-radius: 20px;
+		    border-top-right-radius: 20px;
+		    .top-list{
+				position: fixed;
+				bottom: 50px;
+				top: 100px;
+				left: 0;
+				right: 0;
+				padding: 0 15px;
+				overflow: hidden;
+		    }
+			.floot-btn{
+				position: fixed;
+				bottom: 0;
+				height: 30px;
+				line-height: 30px;
+				background-color: $color-sub-theme;
+				left: 0;
+				right: 0;
+				padding:10px 100px;
+				text-align: center;
+				font-size: $font-size-large;
+				color: $color-text;
 			}
 		}
 		.mini-player{
