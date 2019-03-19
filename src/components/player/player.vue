@@ -14,8 +14,8 @@
 					<div class="middle-l">
 						<div class="cd-wrapper">
 							<div class="cd">
-	                			<img class="image" :class="rotateImage" :src="this.currentSong.image">
-	            			</div>
+								<img class="image" :class="rotateImage" :src="this.currentSong.image">
+							</div>
 						</div>
 					</div>
 				</div>
@@ -43,7 +43,9 @@
 		<transition name="playerList">
 			<div class="player-list" v-show="showPlayerList">
 				<div class="top-list">
-					<SearchResult :songs="this.playList"></SearchResult>
+					<SearchResult :songs="getPlayList"
+									@selectSongs="selectSongs">
+					</SearchResult>
 				</div>
 				<div class="floot-btn" @click.stop.prevent="toggleList">关闭</div>
 			</div>
@@ -80,6 +82,15 @@
 			}
 		},
 		methods: {
+			selectSongs(item, index){
+				if (!this.isready) { // 防止连续点击出现src还没有加载好报错的问题
+					return
+				}
+				// const index = (this.currentIndex + 1 >= this.playList.length) ? 0 : this.currentIndex + 1;
+				this.set_current_index(index);
+				this.set_playing(true);
+				this.isready = false;
+			},
 			togglePlaying(){
 				if (!this.isready) { // 防止连续点击出现src还没有加载好报错的问题
 					return
@@ -97,7 +108,7 @@
 				if (!this.isready) { // 防止连续点击出现src还没有加载好报错的问题
 					return
 				}
-				const index = (this.currentIndex + 1 >= this.playList.length) ? 0 : this.currentIndex+1;
+				const index = (this.currentIndex + 1 >= this.playList.length) ? 0 : this.currentIndex + 1;
 				this.set_current_index(index);
 				this.set_playing(true);
 				this.isready = false;
@@ -106,7 +117,7 @@
 				if (!this.isready) { // 防止连续点击出现src还没有加载好报错的问题
 					return
 				}
-				const index = this.currentIndex - 1 < 0 ? this.playList.length-1 : this.currentIndex-1;
+				const index = this.currentIndex - 1 < 0 ? this.playList.length - 1 : this.currentIndex - 1;
 				this.set_current_index(index);
 				this.set_playing(true);
 				this.isready = false;
@@ -133,6 +144,11 @@
 			})
 		},
 		computed: {
+			getPlayList(){
+				if (this.showPlayerList) {
+					return this.playList
+				}
+			},
 			backgroundImage(){
 				return this.currentSong.image ? `background: url('${this.currentSong.image}') center center / 100% 100% no-repeat;` : ''
 			},
@@ -159,7 +175,7 @@
 			])
 		},
 		watch: {
-			 // 监听currentSong的话，切换歌曲时这个字段内容会改变，所以play()还是会执行，如果只是监听playing，切换歌曲时，值还是true，并没有改变，还是不会执行play()
+			// 监听currentSong的话，切换歌曲时这个字段内容会改变，所以play()还是会执行，如果只是监听playing，切换歌曲时，值还是true，并没有改变，还是不会执行play()
 			currentSong(){
 				this.$nextTick(() => {
 					this.$refs.audio.play()
@@ -171,7 +187,7 @@
 					this.$nextTick(() => {
 						audio.play()
 					})
-				}else{
+				} else {
 					audio.pause();
 				}
 			},
@@ -369,10 +385,10 @@
 			bottom: 0;
 			top: 100px;
 			z-index: 160;
-			background-color: $color-highlight-background;
+			background-color: $color-background;
 			border-top-left-radius: 20px;
-		    border-top-right-radius: 20px;
-		    .top-list{
+			border-top-right-radius: 20px;
+			.top-list{
 				position: fixed;
 				bottom: 50px;
 				top: 100px;
@@ -380,7 +396,7 @@
 				right: 0;
 				padding: 0 15px;
 				overflow: hidden;
-		    }
+			}
 			.floot-btn{
 				position: fixed;
 				bottom: 0;

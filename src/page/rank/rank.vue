@@ -2,13 +2,13 @@
 	<Scroll class="wrapper-rankList">
 		<div>
 			<ul class="ranklist-ul">
-				<li v-for="item in rankList" class="ranklist-li">
+				<li v-for="(item, indexs) in rankList" :key="indexs" class="ranklist-li">
 					<div class="left-img">
 						<img :src="item.picUrl" :alt="item.topTitle" width="100px" height="100px">
 					</div>
 					<div class="right-list">
 						<ul class="right-list-ul">
-							<li v-for="i in item.songList" class="songlist-name">
+							<li v-for="(i, index) in item.songList" :key="index" class="songlist-name">
 								{{`${i.songname}-${i.singername}`}}
 							</li>
 						</ul>
@@ -31,7 +31,7 @@
 		created(){
 			this._getRankList();
 		},
-		methods:{
+		methods: {
 			_getRankList(){
 				getranklist().then((res) => {
 					if (res.code === 0) {
@@ -40,7 +40,7 @@
 				})
 			}
 		},
-		components:{
+		components: {
 			Scroll
 		}
 	}
@@ -69,7 +69,7 @@
 				.right-list{
 					flex: 1;
 					padding:0 20px;
-				    text-align: left;
+					text-align: left;
 					height: 100px;
 					overflow: hidden;
 					.right-list-ul{
@@ -81,7 +81,7 @@
 						justify-content: space-around;
 						.songlist-name{
 							no-wrap();
-						    text-overflow: ellipsis;
+							text-overflow: ellipsis;
 						}
 					}
 				}

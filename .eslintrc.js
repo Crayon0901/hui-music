@@ -44,6 +44,8 @@ module.exports = {
     //强制在块之前使用一致的空格
     'space-before-blocks': 0,
     //强制在逗号前后使用一致的空格
-    'comma-spacing': 0
+    'comma-spacing': 0,
+    //要求或禁止末尾逗号
+    'comma-dangle': 0
   }
 }

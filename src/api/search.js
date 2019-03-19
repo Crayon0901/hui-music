@@ -5,7 +5,7 @@
 import jsonp from 'common/js/jsonp';
 import axios from 'axios';
 import constants from 'common/constants/constants';
-const {GETHOTKEY, GETSEARCH, RECOMMEND_BANNER_URL_PARAMS, OPTION} = constants;
+const {GETHOTKEY, RECOMMEND_BANNER_URL_PARAMS, OPTION} = constants;
 
 export function gethotkey(){
 	const data = Object.assign({},RECOMMEND_BANNER_URL_PARAMS,{
@@ -39,7 +39,7 @@ export function getserach(text){
 		_: 1543314668234
 	})
 	return axios.get('/api/getSerach',{
-		params:data
+		params: data
 	}).then((res) => {
 		return Promise.resolve(res.data)
 	})

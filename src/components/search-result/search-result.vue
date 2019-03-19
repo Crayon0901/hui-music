@@ -7,7 +7,7 @@
 			</div>
 			<div>
 				<ul>
-					<li v-for="item in songs" class="list-row" @click="selectSongs(item)">
+					<li v-for="(item, index) in songs" :key="index" class="list-row" @click="selectSongs(item, index)">
 						<i class="icon-music iconType"></i>
 						<p class="text" v-html="`${item.name}-${item.singer}`"></p>
 					</li>
@@ -25,7 +25,7 @@
 		props: {
 			singer: {
 				type: Object,
-				default: () => {return {}}
+				default: () => { return {} }
 			},
 			songs: {
 				type: Array,
@@ -36,8 +36,8 @@
 			selectSinger(){
 				this.$emit('selectSinger',this.singer)
 			},
-			selectSongs(item){
-				this.$emit('selectSongs',item)
+			selectSongs(item, index){
+				this.$emit('selectSongs',item, index)
 			}
 		},
 		computed: {

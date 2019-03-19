@@ -8,8 +8,8 @@
 
 <script>
 	export default{
-		props:{
-			placeholder:{
+		props: {
+			placeholder: {
 				type: String,
 				default: '搜索歌曲、歌手'
 			}

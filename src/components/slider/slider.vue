@@ -4,7 +4,7 @@
 			<slot></slot><!-- 占位符，用于占据父组件传递近来的DOM节点 -->
 		</div>
 		<div class="dots">
-			<span class="dot" v-for="(item,index) in dots" :class="{active:currentPageIndex === index}"></span>
+			<span class="dot" v-for="(item,index) in dots" :key="index" :class="{active:currentPageIndex === index}"></span>
 		</div>
 	</div>
 </template>
@@ -104,7 +104,7 @@
 						speed: this.speed // 滑动时的速度
 					}
 				})
-				this.slider.on('scrollEnd', () => { //绑定滑动结束的函数
+				this.slider.on('scrollEnd', () => { // 绑定滑动结束的函数
 					let pageIndex = this.slider.getCurrentPage().pageX; // 该方法用于获取当前是第几个page
 					if (this.loop) { // 自动轮播了，图片是n+2了，所以第一个图片应该是下标为1的图片
 						// pageIndex -= 1;
@@ -115,7 +115,7 @@
 						this._play();
 					}
 				})
-				this.slider.on('scrollStart',() => { //绑定滑动开始的函数
+				this.slider.on('scrollStart',() => { // 绑定滑动开始的函数
 					if (this.autoPlay) {
 						clearTimeout(this.timer);
 					}
@@ -163,11 +163,11 @@
 		}
 		.dots{
 			position: absolute;
-		    right: 0;
-		    left: 0;
-		    bottom: 12px;
-		    text-align: center;
-		    font-size: 0;
+			right: 0;
+			left: 0;
+			bottom: 12px;
+			text-align: center;
+			font-size: 0;
 			.dot{
 				display: inline-block;
 				width:8px;

@@ -1,26 +1,24 @@
 import jsonp from '@/common/js/jsonp';
 import constants from '@/common/constants/constants';
-import axios from 'axios';
-import api from './api';
 
 const {SINGER_LIST, RECOMMEND_BANNER_URL_PARAMS, OPTION, SINGER_DETAIL} = constants;
 
-export function getSingerlist(index=-100, sin=0){
+export function getSingerlist(index = -100, sin = 0){
 	let paramsData = {
-		"comm": {
-			"ct": 24,
-			"cv": 10000
+		'comm': {
+			'ct': 24,
+			'cv': 10000
 		},
-		"singerList": {
-			"module": "Music.SingerListServer",
-			"method": "get_singer_list",
-			"param": {
-				"area": 2,
-				"sex": -100,
-				"genre": -100,
-				"index": index,
-				"sin": sin,
-				"cur_page": 1
+		'singerList': {
+			'module': 'Music.SingerListServer',
+			'method': 'get_singer_list',
+			'param': {
+				'area': 2,
+				'sex': -100,
+				'genre': -100,
+				'index': index,
+				'sin': sin,
+				'cur_page': 1
 			}
 		}
 	}
@@ -48,4 +46,21 @@ export function getSingerDetail(id){
 		songstatus: 1
 	})
 	return jsonp(SINGER_DETAIL, data, OPTION)
+}
+// 获取歌曲的vkey
+export function getSongVkey(songmid) {
+    const url = 'https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg'
+    const data = Object.assign({}, {
+        callback: 'musicJsonCallback',
+        loginUin: 3051522991,
+        format: 'jsonp',
+        platform: 'yqq',
+        needNewCode: 0,
+        cid: 205361747,
+        uin: 3051522991,
+        guid: 5931742855,
+        songmid: songmid,
+        filename: `C400${songmid}.m4a`
+    })
+	return jsonp(url, data)
 }

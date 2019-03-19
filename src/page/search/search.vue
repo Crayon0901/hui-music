@@ -4,14 +4,14 @@
 		<h3 class="title-text">热门搜索</h3>
 		<div>
 			<ul class="list-ul">
-				<li v-for="item in hotkeyList" class="song-name" @click="selectKey(item.k)">{{item.k}}</li>
+				<li v-for="(item, index) in hotkeyList" :key="index" class="song-name" @click="selectKey(item.k)">{{item.k}}</li>
 			</ul>
 		</div>
 		<div class="search-result" v-show="this.serachValue">
 			<SearchResult :songs="resultList.songs"
-						  :singer="resultList.singer"
-						  @selectSinger="selectSinger"
-						  @selectSongs="selectSongs">
+							:singer="resultList.singer"
+							@selectSinger="selectSinger"
+							@selectSongs="selectSongs">
 			</SearchResult>
 		</div>
 		<router-view></router-view>
@@ -41,13 +41,12 @@
 		created(){
 			this._gethotkey();
 		},
-		methods:{
+		methods: {
 			_gethotkey(){
 				gethotkey().then((res) => {
 					if (res.code === 0) {
 						this.special_key = res.data.special_key;
 						this.hotkeyList = res.data.hotkey;
-
 					}
 				})
 			},
@@ -95,7 +94,7 @@
 				setSinger: 'SET_SINGER'
 			})
 		},
-		components:{
+		components: {
 			SearchBox,
 			SearchResult
 		},
@@ -104,9 +103,9 @@
 				let newList = this.hotkeyList;
 				let length = newList.length;
 				let arr = []
-				for(let i = 0; i < 3; i++){
-					let num = Math.floor(Math.random()*(length-1))
-					arr.push(newList[num]?newList[num].k:'')
+				for (let i = 0; i < 3; i++) {
+					let num = Math.floor(Math.random() * (length - 1))
+					arr.push(newList[num] ? newList[num].k : '')
 					newList.splice(num, 1);
 				}
 				return arr

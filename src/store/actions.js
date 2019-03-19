@@ -5,7 +5,7 @@
 * @Last Modified time: 2018-11-25 11:56:08
 */
 
-/*用于封装同时触发的多个行为，去mutations多个state*/
+/* 用于封装同时触发的多个行为，去mutations多个state */
 
 import * as types from './mutation-types';
 

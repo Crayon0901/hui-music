@@ -2,7 +2,7 @@
 	<Scroll :data="songs" class="wrapper-scroll" :probeType="3" :listenScroll="true" @scroll="scrollAction" :style="hasmaxhight">
 		<div class="format">
 			<ul>
-				<li v-for="(item,index) in songs" class="songsitem" @click="selectItem(songs, item, index)">
+				<li v-for="(item,index) in songs" :key="index" class="songsitem" @click="selectItem(songs, item, index)">
 					<h2 class="name">{{item.name}}</h2>
 					<p class="desc">{{getDesc(item)}}</p>
 				</li>
@@ -19,9 +19,9 @@
 	import Loading from 'components/loading/loading';
 	export default{
 		props: {
-			songs:{
+			songs: {
 				type: Array,
-				default: []
+				default: () => { return [] }
 			},
 			isMaxHeight: {
 				type: Boolean,
@@ -30,10 +30,10 @@
 		},
 		methods: {
 			getDesc(song){
-				return song ? `${song.singer}·${song.album}`:''
+				return song ? `${song.singer}·${song.album}` : ''
 			},
 			scrollAction(pos){
-				this.$emit('scroll',pos.y)
+				this.$emit('scroll', pos.y)
 			},
 			selectItem(songs, item, index){
 				this.$emit('selectItem', songs, item, index);
@@ -41,7 +41,7 @@
 		},
 		computed: {
 			hasmaxhight(){
-				return this.isMaxHeight ? `overflow: hidden;`:''
+				return this.isMaxHeight ? `overflow: hidden;` : ''
 			}
 		},
 		components: {

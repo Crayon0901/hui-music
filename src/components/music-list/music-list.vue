@@ -10,7 +10,7 @@
 			<div class="play-wrapper" ref="playBtn">
 				<div class="play">
 					<i class="icon-play"></i>
-					<span class="text">随机播放全部</span>
+					<span class="text" @click="selectItem(songs, null, 0)">播放全部</span>
 				</div>
 			</div>
 			<div class="filter" ref="filter"></div>
@@ -37,7 +37,7 @@
 			},
 			songs: {
 				type: Array,
-				default: []
+				default: () => { return [] }
 			}
 		},
 		methods: {
@@ -45,8 +45,8 @@
 				this.$router.back();
 			},
 			scrollAction(y){
-		        let scale = 1;
-		        let blur = 0;
+				let scale = 1;
+				let blur = 0;
 				const percent = Math.abs(y / this.Imageheight)
 				if (this.Imageheight - this.Titleheight + y > 0) {
 					this.$refs.layer.style['transform'] = `translate3d(0,${y}px,0)`;
@@ -54,23 +54,24 @@
 					this.$refs.BGImage.style.height = 0;
 					this.$refs.playBtn.style.display = '';
 					this.$refs.BGImage.style.zIndex = 0;
-				}else{
+				} else {
 					this.$refs.BGImage.style.zIndex = 2;
 					this.$refs.BGImage.style.paddingTop = 0;
 					this.$refs.BGImage.style.height = `${this.Titleheight}px`;
 					this.$refs.playBtn.style.display = 'none'
 				}
-		        if (y > 0) {
+				if (y > 0) {
 					scale = 1 + percent;
-			        this.$refs.BGImage.style.zIndex = 2;
-		        } else {
+					this.$refs.BGImage.style.zIndex = 2;
+				} else {
 					blur = Math.min(20, percent * 20)
-		        }
-		        this.$refs.filter.style['backdrop'] = `blur(${blur}px)`
-		        this.$refs.BGImage.style['transform'] = `scale(${scale})`;
+				}
+				this.$refs.filter.style['backdrop'] = `blur(${blur}px)`
+				this.$refs.BGImage.style['transform'] = `scale(${scale})`;
 			},
 			selectItem(songs, item, index){
 				// 拿到全部播放的songlist，和当前点击的index，这个时候就需要去mutations多个state，可以使用acion封装统一修改
+				console.log(songs[index])
 				this.selectplay({
 					list: songs,
 					index
@@ -82,7 +83,7 @@
 		},
 		computed: {
 			bgStyle(){
-				return this.bgImage ? `background-image: url(${this.bgImage})`: ''
+				return this.bgImage ? `background-image: url(${this.bgImage})` : ''
 			}
 		},
 		mounted(){

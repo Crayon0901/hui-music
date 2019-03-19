@@ -1,15 +1,15 @@
 <template>
 	<div>
-		<Scroll :data="singerList" 
-				ref="scroll" 
-				class="scroll" 
+		<Scroll :data="singerList"
+				ref="scroll"
+				class="scroll"
 				:listenScroll="true"
 				@scroll="scroll"
 				:probeType="3">
 			<ul class="wrapper-singerList" v-show="reveal">
-				<li v-for="arry in singerListM" ref="listGroup">
+				<li v-for="(arry, indexs) in singerListM" :key="indexs" ref="listGroup">
 					<div class="list-name">{{arry.name}}</div>
-					<div v-for="item in arry.item" @click="routerlink(item)">
+					<div v-for="(item, index) in arry.item" :key="index" @click="routerlink(item)">
 						<div class="list-item">
 							<img v-lazy="item.avatar" class="pic" width="60px" height="60px">
 							<span class="singerName">{{item.name}}</span>
@@ -22,7 +22,7 @@
 			</div>
 			<div v-show="reveal" @touchstart="handleTouchStart" @touchmove.stop.prevent="handleTouchMove"> <!-- .stop.prevent阻止事件冒泡和事件捕获 -->
 				<ul class="right-list">
-					<li v-for="(item,index) in shortcutList" :data-index="index" :class="{'current':currentIndex===index}">{{item}}</li>
+					<li v-for="(item,index) in shortcutList" :key="index" :data-index="index" :class="{'current':currentIndex === index}">{{item}}</li>
 				</ul>
 			</div>
 			<div class="fixed-title" ref="fixedTitle" v-show="fixedTitleName">
@@ -58,8 +58,18 @@
 		created(){
 			this._getSingerList();
 		},
+		beforeEnter(to, from, next){
+			console.log('进入歌手页面路由4')
+			next();
+		},
+		beforeRouteEnter(to, from, next){
+			console.log('进入歌手页面路由5')
+			next(vm => {
+				console.log('最后的回调8')
+			});
+		},
 		methods: {
-			//获取列表
+			// 获取列表
 			_getSingerList(indexs, sin){
 				getSingerlist(indexs,sin).then((res) => {
 					if (res.code === 0) {
@@ -78,14 +88,14 @@
 						});
 						if (index < 28) {
 							this._getSingerList(index);
-						}else{
+						} else {
 							console.log(this.singerListM);
 							this.reveal = true;
 						}
 					}
 				})
 			},
-			//右侧列表触碰
+			// 右侧列表触碰
 			handleTouchStart(e){
 				firstTouch.y1 = e.touches[0].pageY; // e.touches[0]是第一个触碰手指的element，.pageY是纵坐标（相对于页面）
 				let anchorIndex = getData(e.target, 'index'); // 获取当前触碰的对应的index
@@ -95,10 +105,10 @@
 				let listGroup = this.$refs.listGroup;
 				this.fixedTitleName = listGroup[this.currentIndex].getElementsByClassName('list-name')[0].innerHTML
 			},
-			//右侧列表触碰移动
+			// 右侧列表触碰移动
 			handleTouchMove(e){
 				firstTouch.y2 = e.touches[0].pageY; // 移动过程中的Y值
-				let delta = (firstTouch.y2 - firstTouch.y1) / 18 | 0;//用移动中的值减去第一次触碰的值，计算差值，然后除以每个字母的高度，在取整
+				let delta = (firstTouch.y2 - firstTouch.y1) / 18 | 0; // 用移动中的值减去第一次触碰的值，计算差值，然后除以每个字母的高度，在取整
 				let anchorIndex = firstTouch.anchorIndex + delta; // 第一次触碰的值加上偏差的值，等于最终的值
 				this.scrollTo(anchorIndex);
 			},
@@ -131,7 +141,7 @@
 		},
 		watch: {
 			scrollY(newY) { // 监听滚动事件
-				let abs = Math.abs(newY); //去Y轴绝对值
+				let abs = Math.abs(newY); // 去Y轴绝对值
 				let listGroup = this.$refs.listGroup;
 				let indexKey = listGroup.filter((item) => {
 					const dom = item.getElementsByClassName('list-name')[0];
@@ -140,13 +150,13 @@
 				this.currentIndex = indexKey.length - 1;
 				if (newY > 0) {
 					this.fixedTitleName = '';
-				}else{
+				} else {
 					this.fixedTitleName = listGroup[this.currentIndex].getElementsByClassName('list-name')[0].innerHTML
 				}
-				let secondCurrent = listGroup[this.currentIndex + 1]?listGroup[this.currentIndex + 1].getElementsByClassName('list-name')[0].offsetTop:listGroup[this.currentIndex].getElementsByClassName('list-name')[0].offsetTop;
+				let secondCurrent = listGroup[this.currentIndex + 1] ? listGroup[this.currentIndex + 1].getElementsByClassName('list-name')[0].offsetTop : listGroup[this.currentIndex].getElementsByClassName('list-name')[0].offsetTop;
 				if (secondCurrent - parseInt(abs) <= 30 && parseInt(abs) < secondCurrent) {
 					this.$refs.fixedTitle.style.transform = `translate(0,-${(30 - (secondCurrent + newY))}px)`
-				}else{
+				} else {
 					this.$refs.fixedTitle.style.transform = `translate(0,0px)`
 				}
 			}

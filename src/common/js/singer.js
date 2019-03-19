@@ -11,6 +11,6 @@ export function createdSinger(singer){
 		id: singer.singer_id,
 		name: singer.singer_name,
 		avatar: singer.singer_pic,
-		mid : singer.singer_mid
+		mid: singer.singer_mid
 	})
 }
