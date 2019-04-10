@@ -7,6 +7,7 @@
 import jsonp from '@/common/js/jsonp';
 import constants from '@/common/constants/constants';// 不知道结构赋值为什么用不了????????
 import axios from 'axios';
+import qs from 'qs';
 const {RECOMMEND_BANNER_URL, RECOMMEND_BANNER_URL_PARAMS, OPTION} = constants;
 
 export function getRecommend(){
@@ -53,4 +54,29 @@ export function getSongVkey() {
         filename: `C400001J5QJL1pRQYB.m4a`
     })
 	return jsonp(url, data)
+	// const data = Object.assign({},{// 合并参数，第一个是公共固定参数，后面添加的是可变的参数
+	// 	"req_0": {
+	// 		"module": "vkey.GetVkeyServer",
+	// 		"method": "CgiGetVkey",
+	// 		"param": {
+	// 			"guid": "3989104853",
+	// 			"songmid": ["0048ukdm41wbsh", "000Wpb4P33yS4C", "001PeJps37WoGW", "000ie6ID1jEHYg", "001AxwcN2CZiZH", "004WZ2yI2QlxWx", "0024BipY1FIfR4", "000tGVpV2EWnXW", "0015dnr83U9uYe", "002d2PFN4gCBVL", "0009E15m3hamQd", "003d5e8a2YFv7P", "002F9yNf3axTav", "000O5gNc1ytE3G", "000TzJeb3iTla3"],
+	// 			"songtype": [],
+	// 			"uin": "0",
+	// 			"loginflag": 0,
+	// 			"platform": "23",
+	// 			"h5to": "speed"
+	// 		}
+	// 	},
+	// 	"comm": {
+	// 		"g_tk": 5381,
+	// 		"uin": 0,
+	// 		"format": "json",
+	// 		"ct": 23,
+	// 		"cv": 0
+	// 	}
+	// })
+	// return axios.post('/api/getVkey',data).then((res) => {
+	// 	return Promise.resolve(res.data)
+	// })
 }

@@ -30,9 +30,9 @@ export default class Song {
   //   })
   // }
 }
-
+// https://u.y.qq.com/cgi-bin/musicu.fcg?_=1554911774814
 export function createSong(musicData) {
-  const Vkey = sessionStorage.vkey ? sessionStorage.vkey : 'B42943CFCA47DEA41896BAB98CA37451A86E1757978EB16F8D9E11EEC45C76C98A1FB9251C24DE5F031AB5300F52584E3C7A8135D06A5119'
+  const Vkey = sessionStorage.vkey ? sessionStorage.vkey : 'B3A89B47FB667A44C494A176EF4A44319CE1AC03CD3A34C09DC9B88F49D6087487A12B5BA3FAE2CD9136E03E10C9933D2C7023816AB6CA6C'
   return new Song({
     id: musicData.songid,
     mid: musicData.songmid,

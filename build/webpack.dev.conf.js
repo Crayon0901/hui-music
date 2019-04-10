@@ -58,6 +58,24 @@ const devWebpackConfig = merge(baseWebpackConfig, {
           console.log(e);
         })
       });
+      //获取歌曲vkey
+      apiRoutes.post('/api/getVkey',(req,res)=>{
+        console.log(req);
+        const url = 'https://u.y.qq.com/cgi-bin/musicu.fcg?_=1554911774814';
+        axios.post(url, {
+          headers: {
+            referer: 'https://u.y.qq.com/',
+            host: 'u.y.qq.com',
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          params: req.query  //这是请求的query
+        }).then((response) => {
+          //response是api地址返回的，数据在data里。
+          res.json(response.data)
+        }).catch((e) => {
+          console.log(e);
+        })
+      });
        app.use('/api', apiRoutes);
     },
     clientLogLevel: 'warning',
